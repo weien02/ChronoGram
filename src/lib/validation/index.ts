@@ -1,6 +1,4 @@
 import {z} from "zod";
-import { db } from "../firebase/config";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const SignUpValidation = z.object({
     email: z.string().email({message: 'Invalid email address!'}),

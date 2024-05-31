@@ -12,8 +12,8 @@ export function useSignIn() {
     const signInUser = useAuthState((state) => state.signin);
 
     async function signin(values: {
-      email: string;
-      password: string;
+      email?: string;
+      password?: string;
     }) {
         try {
           const currUser = await signInWithEmailAndPassword(auth, values.email, values.password);

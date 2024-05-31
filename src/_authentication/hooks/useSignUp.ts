@@ -13,10 +13,10 @@ export function useSignUp() {
     const signInUser = useAuthState((state) => state.signin);
 
     async function signup(values: {
-        email: string;
-        firstName: string;
-        username: string;
-        password: string;
+        email?: string;
+        firstName?: string;
+        username?: string;
+        password?: string;
     }) {
         const exists = await usernameAlreadyExists(values.username);
         if (!exists) {
