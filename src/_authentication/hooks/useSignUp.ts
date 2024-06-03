@@ -48,7 +48,7 @@ export function useSignUp() {
                 if (error.message === emailAlreadyTaken) {
                     toast({
                         variant: "destructive",
-                        title: "Sign up unsuccessful",
+                        title: "Sign up unsuccessful.",
                         description: "An existing account is already using the same email address. Please try another.",
                       });
                 } else {

@@ -76,6 +76,11 @@ function SignInForm() {
                 </Button>
 
                 <p className="text-dark-1 md:small-regular text-center mt-6">
+                  Forgot your password?
+                  <Link to="/reset-password" className="text-primary-600 underline ml-1">Reset password</Link>
+                </p>
+
+                <p className="text-dark-1 md:small-regular text-center">
                   Don't have an account?
                   <Link to="/sign-up" className="text-primary-600 underline ml-1">Sign up</Link>
                 </p>

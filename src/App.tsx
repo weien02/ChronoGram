@@ -6,6 +6,7 @@ import SignUpForm from './_authentication/forms/SignUpForm';
 import RootLayout from './_root/RootLayout';
 import { Home } from './_root/pages';
 import { Toaster } from './components/ui/toaster';
+import ResetPasswordForm from './_authentication/forms/ResetPasswordForm';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route element={<AuthLayout />}>
           <Route path="/sign-in" element={<SignInForm />} />
           <Route path="/sign-up" element={<SignUpForm />} />
+          <Route path="/reset-password" element={<ResetPasswordForm />} />
         </Route>
 
         <Route element={<RootLayout />}>
