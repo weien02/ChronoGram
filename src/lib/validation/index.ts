@@ -3,7 +3,8 @@ import {z} from "zod";
 export const SignUpValidation = z.object({
     email: z.string().email({message: 'Invalid email address!'}),
     firstName: z.string().min(1, {message: 'First name must not be empty!'}),
-    username: z.string().min(1, {message: 'Username must not be empty!'}),
+    username: z.string().min(1, { message: 'Username must not be empty!' })
+        .regex(/^\S*$/, { message: 'Username must not contain spaces!' }),
     password: z.string().min(8, {message: 'Password must contain at least 8 characters!'}),
 })
 

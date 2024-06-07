@@ -26,7 +26,7 @@ function Bottombar() {
         className={`flex-center flex-col gap-1 p-2 transition rounded-full
         ${pathname === '/profile' ? "rounded-[10px] bg-light-2" : ""}`}>
         <img
-          src={"public/assets/glyphs/user.png"}
+          src={"/assets/glyphs/user.png"}
           width={20}
           height={20}
         />
