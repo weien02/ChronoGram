@@ -23,5 +23,5 @@ function AuthLayout() {
       </>
   );
 }
-
+//code
 export default AuthLayout;
