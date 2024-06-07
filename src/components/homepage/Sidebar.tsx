@@ -27,7 +27,7 @@ function Sidebar(){
 
         <Link to="/profile" className="flex gap-3 items-center">
             <img
-              src={"public/assets/glyphs/user.png"}
+              src={"/assets/glyphs/user.png"}
               alt="profile"
               className={'h-14 w-14 rounded-full'}
             />
