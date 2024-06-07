@@ -15,3 +15,25 @@ export async function usernameAlreadyExists(username){
         console.error('Error checking username existence:', error);
     }
 }
+
+export function getUsername() {
+
+    const userDocString = localStorage.getItem("user-doc");
+    if (userDocString) {
+        const userDoc = JSON.parse(userDocString);
+        return userDoc.username;
+    }
+    return null;
+
+}
+
+export function getFirstname() {
+
+    const userDocString = localStorage.getItem("user-doc");
+    if (userDocString) {
+        const userDoc = JSON.parse(userDocString);
+        return userDoc.firstname;
+    }
+    return null;
+
+}
