@@ -10,7 +10,7 @@ import ResetPasswordForm from './_authentication/forms/ResetPasswordForm';
 import TimeTunnel from './_root/pages/TimeTunnel';
 import CreateCapsule from './_root/pages/CreateCapsule';
 import MyCapsules from './_root/pages/MyCapsules';
-import Profile from './_root/pages/Profile';
+import EditProfile from './_root/pages/EditProfile';
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
 
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/time-tunnel" element={<TimeTunnel />} />
           <Route path="/my-capsules" element={<MyCapsules />} />
           <Route path="/create-capsule" element={<CreateCapsule />} />

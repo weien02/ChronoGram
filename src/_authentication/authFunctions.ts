@@ -16,24 +16,29 @@ export async function usernameAlreadyExists(username){
     }
 }
 
-export function getUsername() {
-
+export function getUsername(): string {
     const userDocString = localStorage.getItem("user-doc");
     if (userDocString) {
         const userDoc = JSON.parse(userDocString);
         return userDoc.username;
     }
-    return null;
-
+    return "";
 }
 
-export function getFirstname() {
-
+export function getFirstname(): string {
     const userDocString = localStorage.getItem("user-doc");
     if (userDocString) {
         const userDoc = JSON.parse(userDocString);
         return userDoc.firstname;
     }
-    return null;
+    return "";
+}
 
+export function getProfilePicURL(): string {
+    const userDocString = localStorage.getItem("user-doc");
+    if (userDocString) {
+        const userDoc = JSON.parse(userDocString);
+        return userDoc.profilePicURL;
+    }
+    return "";
 }
