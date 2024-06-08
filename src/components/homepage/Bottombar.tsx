@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { bottombarLinks } from "@/constants";
+import { getProfilePicURL } from "@/_authentication/authFunctions";
 
 function Bottombar() {
   const { pathname } = useLocation();
@@ -22,11 +23,11 @@ function Bottombar() {
           </Link>
         );
       })}
-      <Link to="/profile"
+      <Link to="/edit-profile"
         className={`flex-center flex-col gap-1 p-2 transition rounded-full
-        ${pathname === '/profile' ? "rounded-[10px] bg-light-2" : ""}`}>
+        ${pathname === '/edit-profile' ? "rounded-[10px] bg-light-2" : ""}`}>
         <img
-          src={"/assets/glyphs/user.png"}
+          src={getProfilePicURL()}
           width={20}
           height={20}
         />

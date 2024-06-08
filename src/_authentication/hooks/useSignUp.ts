@@ -28,7 +28,7 @@ export function useSignUp() {
                     email: values.email,
                     username: values.username,
                     firstname: values.firstName,
-                    profilePicURL: "",
+                    profilePicURL: "https://chronogramorbital.vercel.app/assets/glyphs/user.png",
                     lockedCapsules: [],
                     unlockedCapsules: [],
                     createdAt: Date.now()
