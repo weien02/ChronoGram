@@ -30,7 +30,7 @@ function EditProfile() {
         <Form {...form}>
 
           <div className="sm:w-429=0 flex-center flex-col">
-            <h2 className="h3-bold md:h2-bold pt-5 sm:pt-9">Edit Profile *Does not work!*</h2>
+            <h2 className="h3-bold md:h2-bold pt-5 sm:pt-9">Edit Profile *Not working yet!*</h2>
             <p className="hidden sm:block text-dark-1 small-medium md:base-regular mt-2">
               Enter your updated profile details below.
             </p>
