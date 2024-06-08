@@ -4,4 +4,4 @@ function TimeTunnel() {
   );
 }
 
-export default TimeTunnel
+export default TimeTunnel;
