@@ -4,4 +4,4 @@ function CreateCapsule() {
   );
 }
 
-export default CreateCapsule
+export default CreateCapsule;

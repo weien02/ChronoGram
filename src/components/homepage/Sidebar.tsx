@@ -25,7 +25,7 @@ function Sidebar(){
           <h1 className="h3-bold">ChronoGram</h1>
         </Link>
 
-        <Link to="/profile" className="flex gap-3 items-center">
+        <Link to="/profile" className={`flex gap-3 items-center sidebar-link ${pathname === "/profile" ? "  bg-light-2" : ""}`}>
             <img
               src={"/assets/glyphs/user.png"}
               alt="profile"
@@ -61,8 +61,6 @@ function Sidebar(){
 
       </div>
       
-
-
       <Button className="shad-button_primary"
           onClick={() => {
             try {

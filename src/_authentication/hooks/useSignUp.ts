@@ -29,13 +29,12 @@ export function useSignUp() {
                     username: values.username,
                     firstname: values.firstName,
                     profilePicURL: "",
-                    followers: [],
-                    following: [],
-                    capsules: [],
+                    lockedCapsules: [],
+                    unlockedCapsules: [],
                     createdAt: Date.now()
                 }
                 setDoc(doc(db, "users", newUser.user.uid), userDoc);
-                setDoc(doc(db, "listOfUsernames", values.username), {});
+                setDoc(doc(db, "listOfUsernames", values.username), {uid: newUser.user.uid});
                 localStorage.setItem("user-doc", JSON.stringify(userDoc));
                 signInUser(userDoc);
                 toast({

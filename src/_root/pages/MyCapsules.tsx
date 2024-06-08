@@ -4,4 +4,4 @@ function MyCapsules() {
   );
 }
 
-export default MyCapsules
+export default MyCapsules;
