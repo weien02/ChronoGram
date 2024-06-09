@@ -2,13 +2,14 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import useSignOut from "@/_authentication/hooks/useSignOut";
-import { getFirstname, getProfilePicURL, getUsername } from "@/_authentication/authFunctions";
+import { getFirstname, getProfilePicURL, getUid, getUsername } from "@/_authentication/authFunctions";
 import { sidebarLinks } from "@/constants";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import UserBadge from "../capsules/UserBadge";
 
 
 
@@ -34,19 +35,11 @@ function Sidebar(){
 
         <Popover>
           <PopoverTrigger>
-          <div className={`flex gap-3 items-center sidebar-link ${pathname === "/edit-profile" ? "bg-light-2" : ""}`}>
-              <img
-                src={getProfilePicURL()}
-                alt="profile"
-                className="h-14 w-14 rounded-full"
-              />
-              <div className="flex flex-col text-left">
-                <p className="base-semibold">{getFirstname()}</p>
-                <p className="small-regular text-primary-600">@{getUsername()}</p>
-              </div>
-            </div>
+          <div className={`flex items-center sidebar-link ${pathname === "/edit-profile" ? "bg-light-2" : ""}`}>
+            <UserBadge uid={getUid()} index={1} />
+          </div>
           </PopoverTrigger>
-          <PopoverContent className="w-30 flex justify-center">
+          <PopoverContent side="right" className="w-30 flex justify-center bg-light-3">
             <Button className="shad-button_primary" onClick={() => navigate("/edit-profile")}>
               Edit Profile
             </Button>

@@ -1,6 +1,5 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Textarea } from "../ui/textarea";
@@ -23,17 +22,60 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { getUid, searchUid, usernameAlreadyExists } from "@/_authentication/authFunctions";
+import { useState } from "react";
+import { useToast } from "../ui/use-toast";
+import UserBadge from "./UserBadge";
 
 function CapsuleForm() {
-    
-    const navigate = useNavigate();
-    
+
+    const [usernameInput, setUsernameInput] = useState("");
+    const [users, setUsers] = useState<string[]>([getUid()]);
+    const { toast } = useToast();
+
+    async function handleAddUsername(usernameInput) {
+      
+      if (usernameInput === "") {
+        return;
+      }
+      const exists = await usernameAlreadyExists(usernameInput);
+      if (exists) {
+        const userInput = await searchUid(usernameInput);
+        if (users.includes(userInput)) {
+          setUsernameInput("");
+          toast({
+            variant: "destructive",
+            title: "Failed to add user.",
+            description: "User has already been added!",
+          });
+          return;
+        }
+        setUsers([...users, userInput]);
+        setUsernameInput("");
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Failed to add user.",
+          description: "User does not exists!",
+        });
+      }
+    };
+
+    const handleDeleteUser = (indexToDelete: number) => {
+      setUsers((prevUsers) => {
+        const updatedUsers = [...prevUsers];
+        updatedUsers.splice(indexToDelete, 1);
+        return updatedUsers;
+      });
+    };
+
     //placeholder start
     const formSchema = z.object({
-        title: z.string(),
+        title: z.string().min(1, "Your capsule must have a title!"),
         caption: z.string(),
         images: z.array(z.any()),
-        unlockDate: z.date({ required_error: "Unlock date is required!" }),
+        unlockDate: z.date({required_error: "Your capsule must have an unlocking date!"}),
+        sharedWith: z.array(z.string()),
     });
       
     
@@ -44,13 +86,16 @@ function CapsuleForm() {
           caption: "",
           images: [],
           unlockDate: null,
+          sharedWith: [getUid()],
         },
     });
     
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
+        console.log(values.sharedWith);
+        console.log(users);
+
     }
     //placeholder end
 
@@ -131,7 +176,6 @@ function CapsuleForm() {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 bg-light-1" align="start">
-
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -148,6 +192,56 @@ function CapsuleForm() {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="sharedWith"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="shad-form_label">
+                Share
+              </FormLabel>
+              <FormControl>
+                <div className="flex gap-2">
+                  <Input
+                    value={usernameInput}
+                    placeholder="e.g. @chronogram, then click Add"
+                    onChange={(e) => setUsernameInput(e.target.value)}
+                    className="shad-input"
+                  />
+                  <Button type="button" onClick={() => {
+                    if (usernameInput.length >= 2 && usernameInput.charAt(0) === "@") {
+                      handleAddUsername(usernameInput.substring(1));
+                    } else {
+                      handleAddUsername(usernameInput);
+                    }
+                  }} className="shad-button_primary">
+                    Add
+                  </Button>
+                </div>
+              </FormControl>
+              <ul className="w-full max-w-5xl">
+                {users.map((uid, index) => (
+                  <li key={index} className="mt-4 flex items-center justify-between">
+                    <UserBadge uid={uid} index={index} />
+                    {index > 0 && (
+                      <div className="flex items-center justify-end">
+                        <Button
+                          type="button"
+                          onClick={() => handleDeleteUser(index)}
+                          className="shad-button_primary"
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+              <FormMessage className="shad-form_message" />
+            </FormItem>
+          )}
+        />
+
         <div className="flex gap-4 items-center justify-start">
 
           <AlertDialog>
@@ -155,28 +249,30 @@ function CapsuleForm() {
               <Button
                 type="button"
                 className="shad-button_dark_4">
-                Cancel
+                Discard
               </Button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-light-3">
+            <AlertDialogContent className="bg-light-4">
               <AlertDialogHeader>
-                <AlertDialogTitle>Cancel Capsule Creation</AlertDialogTitle>
+                <AlertDialogTitle>Discard capsule?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Are you sure you want to discard the changes?
+                  Your edits will not be saved.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Continue Creation</AlertDialogCancel>
-                <AlertDialogAction onClick={() => navigate(-1)}>Confirm Cancel</AlertDialogAction>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={() => window.location.reload()}>Confirm Discard</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
 
           <Button
             type="submit"
-            className="shad-button_primary">
+            className="shad-button_primary"
+            onClick={() => form.setValue("sharedWith", users)}>
             Create *Does nothing*
           </Button>
+
         </div>
       </form>
     </Form>
