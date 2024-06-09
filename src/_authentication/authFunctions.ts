@@ -42,3 +42,20 @@ export function getProfilePicURL(): string {
     }
     return "";
 }
+
+export function getUid(): string {
+    const userDocString = localStorage.getItem("user-doc");
+    if (userDocString) {
+        const userDoc = JSON.parse(userDocString);
+        return userDoc.uid;
+    }
+    return "";
+}
+// Other users
+
+export async function searchUid(username) {
+    const docRef = doc(db, "listOfUsernames", username);
+	const docSnap = await getDoc(docRef);
+    const usernameDoc = docSnap.data();
+    return usernameDoc.uid;
+}
