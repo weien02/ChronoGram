@@ -12,6 +12,17 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
 import { format } from "date-fns";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 function CapsuleForm() {
     
@@ -120,6 +131,7 @@ function CapsuleForm() {
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 bg-light-1" align="start">
+
                   <Calendar
                     mode="single"
                     selected={field.value}
@@ -137,12 +149,29 @@ function CapsuleForm() {
         />
 
         <div className="flex gap-4 items-center justify-start">
-          <Button
-            type="button"
-            className="shad-button_dark_4"
-            onClick={() => navigate("/my-capsules")}>
-            Cancel
-          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger>
+              <Button
+                type="button"
+                className="shad-button_dark_4">
+                Cancel
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-light-3">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Cancel Capsule Creation</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to discard the changes?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Continue Creation</AlertDialogCancel>
+                <AlertDialogAction onClick={() => navigate(-1)}>Confirm Cancel</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <Button
             type="submit"
             className="shad-button_primary">
