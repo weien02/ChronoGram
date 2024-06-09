@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import useSignOut from "@/_authentication/hooks/useSignOut";
-import { getFirstname, getProfilePicURL, getUid, getUsername } from "@/_authentication/authFunctions";
+import { getUid } from "@/_authentication/authFunctions";
 import { sidebarLinks } from "@/constants";
 import {
   Popover,
