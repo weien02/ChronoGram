@@ -1,3 +1,5 @@
+import CapsuleCarousel from "@/components/capsules/CapsuleCarousel";
+
 function MyCapsules() {
   return (
     <div className="flex flex-1">
@@ -5,6 +7,8 @@ function MyCapsules() {
             <div className="flex-start gap-3 justify-start w-full max-w-5xl">
                 <h2 className="h3-bold md:h2-bold text-left w-full">My Capsules</h2>
             </div>
+            <CapsuleCarousel />
+            <CapsuleCarousel />
         </div>
     </div>    
 );
