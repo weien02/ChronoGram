@@ -88,7 +88,7 @@ function ResetPasswordForm() {
                   Send password reset email
                 </Button>
 
-                <p className="text-dark-1 md:small-regular text-center mt-6">
+                <p className="small-regular text-center mt-6">
                   Remembered your password?
                   <Link to="/sign-in" className="text-primary-600 underline ml-1">Sign in</Link>
                 </p>

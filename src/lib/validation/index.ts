@@ -18,7 +18,7 @@ export const ResetPasswordValidation = z.object({
 });
 
 export const EditProfileValidation = z.object({
-    firstName: z.string().min(1, {message: 'First name must not be empty!'}),
-    username: z.string().min(1, { message: 'Username must not be empty!' })
-        .regex(/^\S*$/, { message: 'Username must not contain spaces!' }),
+    profilePic: z.string(),
+    firstName: z.string(),
+    username: z.string().regex(/^\S*$/, { message: 'Username must not contain spaces!' }),
 });
