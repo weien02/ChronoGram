@@ -292,6 +292,10 @@
     @apply bg-dark-4 hover:bg-primary-500 text-light-1 flex gap-2 !important;
   }
 
+  .shad-button_destructive {
+    @apply bg-red hover:bg-primary-500 text-light-1 flex gap-2 !important;
+  }
+
   .shad-button_ghost {
     @apply flex gap-4 items-center justify-start hover:bg-transparent hover:text-white !important;
   }

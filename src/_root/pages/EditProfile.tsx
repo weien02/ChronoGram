@@ -5,19 +5,64 @@ import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import { EditProfileValidation } from "@/lib/validation";
-import { getFirstname, getUsername } from "@/_authentication/authFunctions";
+import { getFirstname, getProfilePicURL, getUsername } from "@/_authentication/authFunctions";
+import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import useEditProfile from "@/_authentication/hooks/useEditProfile";
 
 function EditProfile() {
   const form = useForm<z.infer<typeof EditProfileValidation>>({
     resolver: zodResolver(EditProfileValidation),
     defaultValues: {
-      firstName: getFirstname(),
-      username: getUsername(),
+      profilePic: "",
+      firstName: "",
+      username: "",
     },
   });
 
+  const { toast } = useToast();
+  const { editProfile } = useEditProfile();
+  const [imagePreview, setImagePreview] = useState(getProfilePicURL());
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size <= 2 * 1024 * 1024) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result as string);
+        }
+        reader.readAsDataURL(file);
+      } else {
+        toast({
+          variant: "destructive",
+          title: "File size too large.",
+          description: "File must be less than 2MB.",
+        });
+      }
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof EditProfileValidation>) {
-    return console.log(values);
+    if (values.username === getUsername()) {
+      values.username = "";
+    }
+    if (values.username === "" && values.firstName === "" && values.profilePic === "") {
+      console.log("No changes to save.")
+      return;
+    }
+    return editProfile(values);
   } 
 
   return (
@@ -30,13 +75,31 @@ function EditProfile() {
         <Form {...form}>
 
           <div className="sm:w-429=0 flex-center flex-col">
-            <h2 className="h3-bold md:h2-bold pt-5 sm:pt-9">Edit Profile *Not working yet!*</h2>
-            <p className="hidden sm:block text-dark-1 small-medium md:base-regular mt-2">
-              Enter your updated profile details below.
+            <p className="body-bold pt-5 sm:pt-9">
+              Enter and save your updated profile details below.
             </p>
             
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-6">
               
+              <FormField
+                control={form.control}
+                name="profilePic"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="shad-form_label">Profile Picture</FormLabel>
+                    <FormControl>
+                      <div className="flex items-center gap-4">
+                        <input type="file" accept="image/*" onChange={handleImageChange} />
+                        {imagePreview && (
+                          <img src={imagePreview} alt="Profile Preview" className="h-16 w-16 rounded-full" />
+                        )}
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="firstName"
@@ -44,7 +107,11 @@ function EditProfile() {
                   <FormItem>
                     <FormLabel className="shad-form_label">First Name</FormLabel>
                     <FormControl>
-                      <Input type="text" className="shad-input" {...field} />
+                      <Input
+                        type="text"
+                        className="shad-input"
+                        placeholder={getFirstname()}
+                        {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -58,15 +125,53 @@ function EditProfile() {
                   <FormItem>
                     <FormLabel className="shad-form_label">Username</FormLabel>
                     <FormControl>
-                      <Input type="text" className="shad-input" {...field} />
+                      <Input
+                        type="text"
+                        className="shad-input"
+                        placeholder={getUsername()}
+                        {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               
-              <Button type="submit" className="shad-button_primary">Save Changes *Does nothing*</Button>
-            
+              <div className="flex mt-4 gap-4 items-center justify-start">
+                
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <Button
+                      type="button"
+                      className="shad-button_dark_4">
+                      Discard Changes
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="bg-light-4">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Discard edits?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Your edits will not be saved.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => window.location.reload()}>Confirm Discard</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                <Button
+                  type="submit"
+                  className="shad-button_primary"
+                  onClick={() => {
+                    if (imagePreview !== getProfilePicURL()) {
+                      form.setValue("profilePic", imagePreview);
+                    }
+                  }}>
+                  Save Changes
+                </Button>
+              </div>
+
             </form>
           </div>
 

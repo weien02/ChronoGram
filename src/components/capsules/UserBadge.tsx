@@ -23,7 +23,6 @@ function UserBadge({ uid, index }) {
             console.error("Error fetching user data:", error);
           }
         } else {
-          console.log("Current user detected!");
           setProfilePicURL(getProfilePicURL());
           setFirstname(getFirstname() + (index === 0 ? " (Creator)" : ""));
           setUsername(getUsername());

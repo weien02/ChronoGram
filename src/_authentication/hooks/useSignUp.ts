@@ -31,8 +31,10 @@ export function useSignUp() {
                     profilePicURL: "https://chronogramorbital.vercel.app/assets/glyphs/user.png",
                     lockedCapsules: [],
                     unlockedCapsules: [],
-                    createdAt: Date.now()
+                    createdAt: Date.now(),
+                    achievements: [false, false, false, false, false],
                 }
+                
                 setDoc(doc(db, "users", newUser.user.uid), userDoc);
                 setDoc(doc(db, "listOfUsernames", values.username), {uid: newUser.user.uid});
                 localStorage.setItem("user-doc", JSON.stringify(userDoc));

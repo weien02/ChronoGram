@@ -228,7 +228,7 @@ function CapsuleForm() {
                         <Button
                           type="button"
                           onClick={() => handleDeleteUser(index)}
-                          className="shad-button_primary"
+                          className="shad-button_destructive"
                         >
                           Remove
                         </Button>

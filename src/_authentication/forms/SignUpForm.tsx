@@ -104,7 +104,7 @@ function SignUpForm() {
                   Sign Up
                 </Button>
 
-                <p className="text-dark-1 md:small-regular text-center mt-6">
+                <p className="small-regular text-center mt-6">
                   Already have an account?
                   <Link to="/sign-in" className="text-primary-600 underline ml-1">Sign in</Link>
                 </p>
