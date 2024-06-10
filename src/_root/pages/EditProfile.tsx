@@ -58,6 +58,9 @@ function EditProfile() {
     if (values.username === getUsername()) {
       values.username = "";
     }
+    if (values.firstName = getFirstname()) {
+      values.firstName = "";
+    }
     if (values.username === "" && values.firstName === "" && values.profilePic === "") {
       console.log("No changes to save.")
       return;

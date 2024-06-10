@@ -53,7 +53,7 @@ function useEditProfile() {
                 toast({
                     variant: "success",
                     title: "Update successful!",
-                    description: "You profile has been updated successfully!",
+                    description: "Your profile has been updated successfully!",
                 });
                 setTimeout(() => {
                     window.location.reload();
