@@ -125,6 +125,7 @@ function CapsuleForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Caption</FormLabel>
+              <div className="small-regular">(Caption will be hidden when time capsule is locked.)</div>
               <FormControl>
                 <Textarea
                   className="shad-textarea"
@@ -142,6 +143,7 @@ function CapsuleForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="shad-form_label">Upload Photos</FormLabel>
+              <div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>
               <FormControl>
                 <PhotoUploader />
               </FormControl>
@@ -214,12 +216,25 @@ function CapsuleForm() {
                     } else {
                       handleAddUsername(usernameInput);
                     }
+                    setTimeout(() => {
+                      const userList = document.getElementById("sharedWithList");
+                      userList.scrollTop = userList.scrollHeight;
+                    }, 500);
                   }} className="shad-button_primary">
                     Add
                   </Button>
                 </div>
               </FormControl>
-              <ul className="w-full max-w-5xl">
+              <div className="small-regular">
+                Currently shared with: {users.length - 1} other user{users.length === 2 ? "" : "s"}.
+              </div>
+              <ul
+                id="sharedWithList"
+                className="w-full max-w-5xl"
+                style={{
+                  maxHeight: '200px',
+                  overflowY: 'auto',
+                }}>
                 {users.map((uid, index) => (
                   <li key={index} className="mt-4 flex items-center justify-between">
                     <UserBadge uid={uid} index={index} />
