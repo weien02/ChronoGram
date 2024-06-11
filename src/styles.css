@@ -6,6 +6,12 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevent default scrollbars on body */
+}
+
 @layer base {
   * {
     @apply box-border list-none p-0 m-0 scroll-smooth;
@@ -115,7 +121,9 @@
   }
 
   .common-container {
-    @apply flex flex-col flex-1 items-center gap-10 py-10 px-5 md:px-8 lg:p-14;
+    @apply flex flex-col flex-1 items-center gap-10 overflow-scroll py-10 px-5 md:px-8 lg:p-14 pb-40;
+    height: 100%;
+    overflow-y: auto;
   }
 
   .bg-destructive {
@@ -171,7 +179,7 @@
   }
 
   .post_details-card {
-    @apply bg-dark-2 w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border border-dark-4 xl:rounded-l-[24px];
+    @apply bg-light-4 w-full max-w-5xl rounded-[30px] flex-col flex xl:flex-row border-8 border-light-3 xl:rounded-l-[24px];
   }
 
   .post_details-img {
@@ -220,6 +228,23 @@
 
   .file_uploader-box {
     @apply flex-center flex-col p-7 h-80 lg:h-[612px];
+  }
+
+  .carousel-image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 100%;
+    overflow: hidden;
+  }
+
+  .carousel-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
   }
 
   /* Grid Post List */

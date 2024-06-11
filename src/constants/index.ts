@@ -15,6 +15,11 @@ export const sidebarLinks = [
         label: "My Capsules",
     },
     {
+        imgURL: "/assets/glyphs/shared.png",
+        route: "/shared-with-me",
+        label: "Shared With Me",
+    },
+    {
         imgURL: "/assets/glyphs/create.png",
         route: "/create-capsule",
         label: "Create Capsule",
@@ -41,6 +46,11 @@ export const sidebarLinks = [
         imgURL: "/assets/glyphs/capsule.png",
         route: "/my-capsules",
         label: "My Capsules",
+    },
+    {
+        imgURL: "/assets/glyphs/shared.png",
+        route: "/shared-with-me",
+        label: "Shared With Me",
     },
 
 ];
