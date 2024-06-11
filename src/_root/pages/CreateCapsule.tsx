@@ -1,15 +1,13 @@
-import CapsuleForm from "@/components/capsules/CapsuleForm";
+import CreateCapsuleForm from "@/components/capsules/CreateCapsuleForm";
 
 function CreateCapsule() {
   return (
     <div className="flex flex-1">
-        <div className="common-container" style={{
-                  overflowY: 'auto',
-                }}>
-            <div className="flex-start gap-3 justify-start w-full max-w-5xl">
-                <h2 className="h3-bold md:h2-bold text-left w-full">Create Capsule *Not working yet!*</h2>
+        <div className="common-container">
+            <div className="max-w-5xl flex-start gap-3 justify-start w-full">
+                <h2 className="h3-bold md:h2-bold text-left w-full">Create Capsule</h2>
             </div>
-            <CapsuleForm />
+                <CreateCapsuleForm />
         </div>
     </div>    
 );

@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Textarea } from "../ui/textarea";
-import PhotoUploader from "./PhotoUploader";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
@@ -23,15 +22,43 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { getUid, searchUid, usernameAlreadyExists } from "@/_authentication/authFunctions";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useToast } from "../ui/use-toast";
 import UserBadge from "./UserBadge";
+import { Card, CardContent } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Switch } from "@/components/ui/switch"
 
-function CapsuleForm() {
+function CreateCapsuleForm() {
 
     const [usernameInput, setUsernameInput] = useState("");
     const [users, setUsers] = useState<string[]>([getUid()]);
+    const [images, setImages] = useState<string[]>([]);
     const { toast } = useToast();
+    const nextButtonRef = useRef<HTMLButtonElement>(null);
+
+    const handleImageChange = (e) => {
+      const file = e.target.files?.[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImages([...images, (reader.result as string)]);
+      }
+      reader.readAsDataURL(file);
+      setTimeout(() => {
+        // To scroll to the end of carousel
+        for (let i = 0; i < images.length; i++) {
+          nextButtonRef.current.click();
+        }
+      }, 500);
+      
+    };
+
 
     async function handleAddUsername(usernameInput) {
       
@@ -52,11 +79,15 @@ function CapsuleForm() {
         }
         setUsers([...users, userInput]);
         setUsernameInput("");
+        setTimeout(() => {
+          const userList = document.getElementById("sharedWithList");
+          userList.scrollTop = userList.scrollHeight;
+        }, 500);
       } else {
         toast({
           variant: "destructive",
           title: "Failed to add user.",
-          description: "User does not exists!",
+          description: "User does not exist!",
         });
       }
     };
@@ -69,13 +100,13 @@ function CapsuleForm() {
       });
     };
 
-    //placeholder start
     const formSchema = z.object({
         title: z.string().min(1, "Your capsule must have a title!"),
         caption: z.string(),
         images: z.array(z.any()),
         unlockDate: z.date({required_error: "Your capsule must have an unlocking date!"}),
         sharedWith: z.array(z.string()),
+        locked: z.boolean()
     });
       
     
@@ -87,65 +118,30 @@ function CapsuleForm() {
           images: [],
           unlockDate: null,
           sharedWith: [getUid()],
+          locked: false,
         },
     });
     
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values.sharedWith);
-        console.log(users);
-
+        console.log(values.locked);
     }
-    //placeholder end
 
     return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-9 w-full  max-w-5xl">
+        className="flex flex-col gap-9 w-full max-w-5xl">
 
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="shad-form_label">Title</FormLabel>
+              <FormLabel className="body-bold">Title</FormLabel>
               <FormControl>
                 <Input type="text" className="shad-input" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        
-        <FormField
-          control={form.control}
-          name="caption"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Caption</FormLabel>
-              <div className="small-regular">(Caption will be hidden when time capsule is locked.)</div>
-              <FormControl>
-                <Textarea
-                  className="shad-textarea"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="images"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="shad-form_label">Upload Photos</FormLabel>
-              <div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>
-              <FormControl>
-                <PhotoUploader />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -157,7 +153,7 @@ function CapsuleForm() {
           name="unlockDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Set Unlocking Date</FormLabel>
+              <FormLabel className="body-bold">Set Unlocking Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild className="bg-light-1">
                   <FormControl>
@@ -193,20 +189,83 @@ function CapsuleForm() {
             </FormItem>
           )}
         />
+        
+        <FormField
+          control={form.control}
+          name="caption"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="body-bold">Caption</FormLabel>
+              <div className="small-regular">(Caption will be hidden when time capsule is locked.)</div>
+              <FormControl>
+                <Textarea
+                  className="shad-textarea"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="body-bold">Upload Photos</FormLabel>
+              <div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>
+              <FormControl>
+                <input type="file" accept="image/*" onChange={handleImageChange}/>
+              </FormControl>
+              <div className="flex justify-center mt-4">
+                <Carousel className="w-full max-w-xs">
+                  <CarouselContent>
+                    {images.length === 0 ? (
+                      <CarouselItem className="bg-light-1 rounded-lg">
+                        <div className="p-1 flex justify-center items-center h-40">
+                          <p>No photos uploaded</p>
+                        </div>
+                      </CarouselItem>
+                    ) : (
+                      images.map((src, index) => (
+                        <CarouselItem key={index}>
+                          <div className="p-1">
+                            <Card>
+                              <CardContent className="carousel-image-wrapper">
+                                <img src={src} alt={`Image ${index + 1}`} className="carousel-image rounded-lg" />
+                              </CardContent>
+                            </Card>
+                          </div>
+                          <div className="py-2 text-center text-sm text-muted-foreground">
+                            Photo {index + 1} of {images.length}
+                          </div>
+                        </CarouselItem>
+                      ))
+                    )}
+                  </CarouselContent>
+                  <CarouselPrevious type="button"/>
+                  <CarouselNext ref={nextButtonRef} type="button" />
+                </Carousel>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
           name="sharedWith"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="shad-form_label">
+              <FormLabel className="body-bold">
                 Share
               </FormLabel>
               <FormControl>
                 <div className="flex gap-2">
                   <Input
                     value={usernameInput}
-                    placeholder="e.g. @chronogram, then click Add"
+                    placeholder="e.g. @chronogram, then click 'Add'"
                     onChange={(e) => setUsernameInput(e.target.value)}
                     className="shad-input"
                   />
@@ -216,10 +275,6 @@ function CapsuleForm() {
                     } else {
                       handleAddUsername(usernameInput);
                     }
-                    setTimeout(() => {
-                      const userList = document.getElementById("sharedWithList");
-                      userList.scrollTop = userList.scrollHeight;
-                    }, 500);
                   }} className="shad-button_primary">
                     Add
                   </Button>
@@ -257,6 +312,27 @@ function CapsuleForm() {
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="locked"
+          render={({ field }) => (
+            <FormItem className="bg-light-3 flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="body-bold">
+                  Lock Capsule
+                </FormLabel>
+                <p className="small-regular">You will no longer be able to edit capsule content after locking.</p>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <div className="flex gap-4 items-center justify-start">
 
           <AlertDialog>
@@ -264,12 +340,12 @@ function CapsuleForm() {
               <Button
                 type="button"
                 className="shad-button_dark_4">
-                Discard
+                Discard Changes
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent className="bg-light-4">
               <AlertDialogHeader>
-                <AlertDialogTitle>Discard capsule?</AlertDialogTitle>
+                <AlertDialogTitle>Discard changes?</AlertDialogTitle>
                 <AlertDialogDescription>
                   Your edits will not be saved.
                 </AlertDialogDescription>
@@ -294,4 +370,4 @@ function CapsuleForm() {
   );
 };
 
-export default CapsuleForm;
+export default CreateCapsuleForm;

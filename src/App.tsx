@@ -11,6 +11,7 @@ import TimeTunnel from './_root/pages/TimeTunnel';
 import CreateCapsule from './_root/pages/CreateCapsule';
 import MyCapsules from './_root/pages/MyCapsules';
 import EditProfile from './_root/pages/EditProfile';
+import SharedWithMe from './_root/pages/SharedWithMe';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/time-tunnel" element={<TimeTunnel />} />
           <Route path="/my-capsules" element={<MyCapsules />} />
+          <Route path="/shared-with-me" element={<SharedWithMe />} />
           <Route path="/create-capsule" element={<CreateCapsule />} />
         </Route>
       </Routes>

@@ -8,16 +8,14 @@ function RootLayout() {
     const authUser = useAuthState(state => state.user);
     if (authUser) {
         return (
-        <>
-        <div className='w-full md:flex'>
-            <Topbar />
-            <Sidebar />
-                <section className="flex flex-1 h-full">
-                    <Outlet />
-                </section>
-            <Bottombar />
-        </div>
-        </>
+            <div className='w-full md:flex h-screen'>
+                <Topbar />
+                <Sidebar />
+                    <section className="flex flex-1 h-full overflow-auto">
+                        <Outlet />
+                    </section>
+                <Bottombar />
+            </div>
         );
     } else {
         return (<Navigate to="/sign-in" />);

@@ -1,32 +1,25 @@
 import { Card, CardHeader, CardContent} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import CapsuleCarousel from '../capsules/CapsuleCarousel';
 import { getFirstname } from '@/_authentication/authFunctions';
+import LockedCapsuleCarousel from '../capsules/LockedCapsuleCarousel';
 
 function Dashboard() {
   return (
     <div className="p-6">
         
-        <h1 className="mb-8 h3-bold md:h2-bold">{getFirstname()}'s Dashboard *Placeholder*</h1>
+      <h1 className="mb-8 h3-bold md:h2-bold">{getFirstname()}'s Dashboard</h1>
 
       <div className="gap-6">
-        <Card className="bg-light-3">
-          <CardHeader>
-            <h2 className="text-xl font-semibold">Recent Activity</h2>
-          </CardHeader>
-          <CardContent className='flex justify-center'>
-            <CapsuleCarousel />
-          </CardContent>
-        </Card>
-
+        {/* Don't remove the surrounding div, can me used to add more cards*/ }
         <Card className="mt-8 bg-light-3">
           <CardHeader>
             <h2 className="text-xl font-semibold">Upcoming Unlocks</h2>
           </CardHeader>
           <CardContent className='flex justify-center'>
-            <CapsuleCarousel />
+            <LockedCapsuleCarousel />
           </CardContent>
         </Card>
+
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
