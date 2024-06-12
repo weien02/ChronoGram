@@ -14,7 +14,7 @@ function AuthLayout() {
               alt="bg"
               className="hidden xl:block h-screen w-1/2 object-cover bg-no-repeat"
             />
-            <section className="flex flex-1 items-center flex-col py-10 max-h-screen overflow-y-auto justify-start md:justify-center">
+            <section className="flex flex-1 items-center flex-col py-10 max-h-screen overflow-y-scroll justify-start md:justify-center">
               <Outlet />
             </section>
           </>
