@@ -16,7 +16,7 @@ function useEditProfile() {
         username?: string;
     }) {
 
-        const storageRef = ref(storage, `profilePics/${getUsername()}`);
+        const storageRef = ref(storage, `profilePics/${getUid()}`);
 		const userDocRef = doc(db, "users", getUid());
         let newProfilePicURL = getProfilePicURL();
 
@@ -25,7 +25,7 @@ function useEditProfile() {
             try {
                 if (values.profilePic !== "") {
                     await uploadString(storageRef, values.profilePic, "data_url");
-                    newProfilePicURL = await getDownloadURL(ref(storage, `profilePics/${getUsername()}`));
+                    newProfilePicURL = await getDownloadURL(ref(storage, `profilePics/${getUid()}`));
                 }
 
                 if (values.username !== "") {

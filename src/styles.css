@@ -7,7 +7,6 @@
 @tailwind utilities;
 
 html, body, #root, .App {
-  height: 100%;
   margin: 0;
   overflow: hidden; /* Prevent default scrollbars on body */
 }

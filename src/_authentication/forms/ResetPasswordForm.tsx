@@ -69,13 +69,17 @@ function ResetPasswordForm() {
               Reset Password
             </h2>
 
+            <p className="hidden sm:block text-dark-1 small-medium md:base-regular mt-2">
+              Enter your email address below to receive password reset link.
+            </p>
+
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-5 w-full mt-6">
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">Email Address</FormLabel>
+                    <FormLabel className="body-bold">Email Address</FormLabel>
                     <FormControl>
                       <Input type="email" className="shad-input" {...field} />
                     </FormControl>

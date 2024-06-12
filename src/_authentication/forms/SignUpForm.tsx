@@ -48,7 +48,7 @@ function SignUpForm() {
                   name="email"
                   render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">Email Address</FormLabel>
+                    <FormLabel className="body-bold">Email Address</FormLabel>
                     <FormControl>
                       <Input type="email" className="shad-input" {...field} />
                     </FormControl>
@@ -62,7 +62,7 @@ function SignUpForm() {
                   name="firstName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="shad-form_label">First Name</FormLabel>
+                      <FormLabel className="body-bold">First Name</FormLabel>
                       <FormControl>
                         <Input type="firstName" className="shad-input" {...field} />
                       </FormControl>
@@ -76,8 +76,8 @@ function SignUpForm() {
                   name="username"
                   render={({ field }) => (
                   <FormItem>
-                      <FormLabel className="shad-form_label">Username</FormLabel>
-                      <p className="text-dark-1 small-medium">(This will be publicly visible.)</p>
+                      <FormLabel className="body-bold">Username</FormLabel>
+                      <p className="small-medium">(This will be publicly visible.)</p>
                       <FormControl>
                         <Input type="username" className="shad-input" {...field} />
                       </FormControl>
@@ -91,7 +91,7 @@ function SignUpForm() {
                   name="password"
                   render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">Password</FormLabel>
+                    <FormLabel className="body-bold">Password</FormLabel>
                       <FormControl>
                         <Input type="password" className="shad-input" {...field} />
                       </FormControl>
