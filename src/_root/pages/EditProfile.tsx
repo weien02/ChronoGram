@@ -78,7 +78,8 @@ function EditProfile() {
         <Form {...form}>
 
           <div className="sm:w-429=0 flex-center flex-col">
-            <p className="body-bold pt-5 sm:pt-9">
+          
+            <p className="hidden sm:block text-dark-1 small-medium md:base-regular mt-2">
               Enter and save your updated profile details below.
             </p>
             
@@ -89,11 +90,24 @@ function EditProfile() {
                 name="profilePic"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">Profile Picture</FormLabel>
+                    <FormLabel className="body-bold">Profile Picture</FormLabel>
                     <FormControl>
-                      <div className="flex items-center gap-4">
-                        <input type="file" accept="image/*" onChange={handleImageChange} />
-                        {imagePreview && (
+                      <div className="flex items-center justify-between gap-4">
+                        <input 
+                          type="file" 
+                          accept="image/*" 
+                          onChange={handleImageChange} 
+                          id="fileInput"
+                          style={{ display: 'none' }}
+                        />
+                        <Button 
+                          type="button" 
+                          className="shad-button_primary" 
+                          onClick={() => document.getElementById('fileInput').click()}
+                        >
+                          Choose Photo
+                        </Button>
+                        {(
                           <img src={imagePreview} alt="Profile Preview" className="h-16 w-16 rounded-full" />
                         )}
                       </div>
@@ -108,7 +122,7 @@ function EditProfile() {
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">First Name</FormLabel>
+                    <FormLabel className="body-bold">First Name</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
@@ -126,7 +140,7 @@ function EditProfile() {
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="shad-form_label">Username</FormLabel>
+                    <FormLabel className="body-bold">Username</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
@@ -151,7 +165,7 @@ function EditProfile() {
                   </AlertDialogTrigger>
                   <AlertDialogContent className="bg-light-4">
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Discard edits?</AlertDialogTitle>
+                      <AlertDialogTitle>Discard changes?</AlertDialogTitle>
                       <AlertDialogDescription>
                         Your edits will not be saved.
                       </AlertDialogDescription>

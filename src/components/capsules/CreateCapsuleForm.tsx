@@ -2,7 +2,6 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
@@ -34,14 +33,48 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Switch } from "@/components/ui/switch"
+import useCreateCapsule from "./hooks/useCreateCapsule";
+import { Textarea } from "../ui/textarea";
 
 function CreateCapsuleForm() {
 
+    const [textValue, setTextValue] = useState('');
+    const [textNotes, setTextNotes] = useState([]);
     const [usernameInput, setUsernameInput] = useState("");
     const [users, setUsers] = useState<string[]>([getUid()]);
     const [images, setImages] = useState<string[]>([]);
+    const [audios, setAudios] = useState<string[]>([]);
     const { toast } = useToast();
     const nextButtonRef = useRef<HTMLButtonElement>(null);
+    const nextAudioButtonRef = useRef<HTMLButtonElement>(null);
+    const nextTextButtonRef = useRef<HTMLButtonElement>(null);
+    const { createCapsule } = useCreateCapsule();
+
+    const handleTextChange = (e) => {
+      setTextValue(e.target.value);
+    };
+
+    const handleAddText = () => {
+      if (textValue.trim() !== '') {
+        setTextNotes([...textNotes, textValue]);
+        setTextValue('');
+      }
+      setTimeout(() => {
+        // To scroll to the end of carousel
+        for (let i = 0; i < textNotes.length; i++) {
+          nextTextButtonRef.current.click();
+        }
+      }, 500);
+      
+    };
+
+    const handleDeleteText = (indexToDelete: number) => {
+      setTextNotes((prevNotes) => {
+        const updatedNotes = [...prevNotes];
+        updatedNotes.splice(indexToDelete, 1);
+        return updatedNotes;
+      });
+    };
 
     const handleImageChange = (e) => {
       const file = e.target.files?.[0];
@@ -50,6 +83,7 @@ function CreateCapsuleForm() {
         setImages([...images, (reader.result as string)]);
       }
       reader.readAsDataURL(file);
+
       setTimeout(() => {
         // To scroll to the end of carousel
         for (let i = 0; i < images.length; i++) {
@@ -59,6 +93,36 @@ function CreateCapsuleForm() {
       
     };
 
+    const handleDeleteImage = (indexToDelete: number) => {
+      setImages((prevImages) => {
+        const updatedImages = [...prevImages];
+        updatedImages.splice(indexToDelete, 1);
+        return updatedImages;
+      });
+    };
+
+    const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAudios((prevAudios) => [...prevAudios, reader.result as string]);
+      };
+      if (file) reader.readAsDataURL(file);
+  
+      setTimeout(() => {
+        for (let i = 0; i < audios.length; i++) {
+          nextAudioButtonRef.current?.click();
+        }
+      }, 500);
+    };
+
+    const handleDeleteAudio = (indexToDelete: number) => {
+      setAudios((prevAudios) => {
+        const updatedAudios = [...prevAudios];
+        updatedAudios.splice(indexToDelete, 1);
+        return updatedAudios;
+      });
+    };
 
     async function handleAddUsername(usernameInput) {
       
@@ -100,11 +164,13 @@ function CreateCapsuleForm() {
       });
     };
 
+    {/*Form Validation*/}
     const formSchema = z.object({
         title: z.string().min(1, "Your capsule must have a title!"),
-        caption: z.string(),
-        images: z.array(z.any()),
         unlockDate: z.date({required_error: "Your capsule must have an unlocking date!"}),
+        notes: z.array(z.string()),
+        images: z.array(z.string()),
+        audios: z.array(z.string()),
         sharedWith: z.array(z.string()),
         locked: z.boolean()
     });
@@ -114,26 +180,30 @@ function CreateCapsuleForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
           title: "",
-          caption: "",
-          images: [],
           unlockDate: null,
+          notes: [],
+          images: [],
+          audios: [],
           sharedWith: [getUid()],
           locked: false,
         },
     });
     
     function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values.locked);
+      console.log(values.notes);
+      console.log(values.images);
+      console.log(values.audios);
+      createCapsule(values);
     }
 
+    {/* Start of form */}
     return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-9 w-full max-w-5xl">
 
+        {/*Title*/}
         <FormField
           control={form.control}
           name="title"
@@ -141,13 +211,14 @@ function CreateCapsuleForm() {
             <FormItem>
               <FormLabel className="body-bold">Title</FormLabel>
               <FormControl>
-                <Input type="text" className="shad-input" {...field} />
+                <Input type="text" placeholder="Type your title here." className="shad-input" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/*Unlock Date*/}
         <FormField
           control={form.control}
           name="unlockDate"
@@ -189,25 +260,71 @@ function CreateCapsuleForm() {
             </FormItem>
           )}
         />
-        
+
+        {/*Notes*/}
         <FormField
           control={form.control}
-          name="caption"
+          name="notes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="body-bold">Caption</FormLabel>
-              <div className="small-regular">(Caption will be hidden when time capsule is locked.)</div>
-              <FormControl>
-                <Textarea
-                  className="shad-textarea"
-                  {...field}
-                />
-              </FormControl>
+              <FormLabel className="body-bold">Add Notes</FormLabel>
+                <div className="small-regular">(Notes will be hidden when time capsule is locked.)</div>
+                <FormControl>
+                  <div>
+                    <Textarea 
+                      onChange={handleTextChange}
+                      value={textValue}
+                      className="shad-textarea"
+                      placeholder="Type your note here."
+                    />
+                    <Button 
+                      type="button" 
+                      className="shad-button_primary mt-2" 
+                      onClick={handleAddText}
+                    >
+                      Add Note
+                    </Button>
+                  </div>
+                </FormControl>
+                <div className="flex justify-center mt-4">
+                  <Carousel className="w-full max-w-xs">
+                    <CarouselContent>
+                      {textNotes.length === 0 ? (
+                        <CarouselItem className="rounded-lg">
+                          <div className="p-1 flex justify-center items-center h-40">
+                            <p>No notes added</p>
+                          </div>
+                        </CarouselItem>
+                      ) : (
+                        textNotes.map((note, index) => (
+                          <CarouselItem key={index}>
+                            <div className="p-1">
+                              <Card className="bg-light-1 p-4">
+                                <CardContent className="p-1 flex justify-center items-center">
+                                  <p>{note}</p>
+                                </CardContent>
+                              </Card>
+                            </div>
+                            <div className="py-2 text-center small-regular">
+                              Note {index + 1} of {textNotes.length}
+                            </div>
+                            <Button onClick={() => handleDeleteText(index)} type="button" className="mx-auto justify-center shad-button_destructive">
+                              Remove
+                            </Button>
+                          </CarouselItem>
+                        ))
+                      )}
+                    </CarouselContent>
+                    <CarouselPrevious type="button" />
+                    <CarouselNext ref={nextTextButtonRef} type="button" />
+                  </Carousel>
+                </div>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/*Photos*/}
         <FormField
           control={form.control}
           name="images"
@@ -216,13 +333,28 @@ function CreateCapsuleForm() {
               <FormLabel className="body-bold">Upload Photos</FormLabel>
               <div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>
               <FormControl>
-                <input type="file" accept="image/*" onChange={handleImageChange}/>
+                <div>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={handleImageChange} 
+                    id="photoInput"
+                    style={{ display: 'none' }}
+                  />
+                  <Button 
+                    type="button" 
+                    className="shad-button_primary" 
+                    onClick={() => document.getElementById('photoInput').click()}
+                  >
+                    Add Files
+                  </Button>
+                </div>
               </FormControl>
               <div className="flex justify-center mt-4">
                 <Carousel className="w-full max-w-xs">
                   <CarouselContent>
                     {images.length === 0 ? (
-                      <CarouselItem className="bg-light-1 rounded-lg">
+                      <CarouselItem className="rounded-lg">
                         <div className="p-1 flex justify-center items-center h-40">
                           <p>No photos uploaded</p>
                         </div>
@@ -237,9 +369,12 @@ function CreateCapsuleForm() {
                               </CardContent>
                             </Card>
                           </div>
-                          <div className="py-2 text-center text-sm text-muted-foreground">
+                          <div className="py-2 text-center small-regular">
                             Photo {index + 1} of {images.length}
                           </div>
+                          <Button onClick={() => handleDeleteImage(index)} type="button" className="mx-auto justify-center shad-button_destructive">
+                            Remove
+                          </Button>
                         </CarouselItem>
                       ))
                     )}
@@ -253,6 +388,74 @@ function CreateCapsuleForm() {
           )}
         />
 
+        {/*Audio*/}
+        <FormField
+          control={form.control}
+          name="audios"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="body-bold">Upload Audio Files</FormLabel>
+              <div className="small-regular">(Audio files will be hidden when time capsule is locked.)</div>
+              <FormControl>
+                <div>
+                    <input 
+                      type="file" 
+                      accept="audio/*" 
+                      onChange={handleAudioChange} 
+                      id="audioInput"
+                      style={{ display: 'none' }}
+                    />
+                    <Button 
+                      type="button" 
+                      className="shad-button_primary" 
+                      onClick={() => document.getElementById('audioInput').click()}
+                    >
+                      Add Files
+                    </Button>
+                  </div>
+              </FormControl>
+              <div className="flex justify-center mt-4">
+                <Carousel className="w-full max-w-xs">
+                  <CarouselContent>
+                    {audios.length === 0 ? (
+                      <CarouselItem className="rounded-lg">
+                        <div className="p-1 flex justify-center items-center h-40">
+                          <p>No audio files uploaded</p>
+                        </div>
+                      </CarouselItem>
+                    ) : (
+                      audios.map((src, index) => (
+                        <CarouselItem key={index}>
+                          <div className="p-1">
+                            <Card>
+                              <CardContent className="p-1 flex justify-center items-center">
+                                <audio controls>
+                                  <source src={src} />
+                                  Your browser does not support the audio element.
+                                </audio>
+                              </CardContent>
+                            </Card>
+                          </div>
+                          <div className="py-2 text-center small-regular">
+                            Audio {index + 1} of {audios.length}
+                          </div>
+                          <Button onClick={() => handleDeleteAudio(index)} type="button" className="mx-auto justify-center shad-button_destructive">
+                            Remove
+                          </Button>
+                        </CarouselItem>
+                      ))
+                    )}
+                  </CarouselContent>
+                  <CarouselPrevious type="button" />
+                  <CarouselNext ref={nextAudioButtonRef} type="button" />
+                </Carousel>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/*Share*/}
         <FormField
           control={form.control}
           name="sharedWith"
@@ -265,7 +468,7 @@ function CreateCapsuleForm() {
                 <div className="flex gap-2">
                   <Input
                     value={usernameInput}
-                    placeholder="e.g. @chronogram, then click 'Add'"
+                    placeholder="e.g. @chronogram, then click 'Add User'"
                     onChange={(e) => setUsernameInput(e.target.value)}
                     className="shad-input"
                   />
@@ -276,7 +479,7 @@ function CreateCapsuleForm() {
                       handleAddUsername(usernameInput);
                     }
                   }} className="shad-button_primary">
-                    Add
+                    Add User
                   </Button>
                 </div>
               </FormControl>
@@ -312,6 +515,7 @@ function CreateCapsuleForm() {
           )}
         />
 
+        {/*Lock*/}
         <FormField
           control={form.control}
           name="locked"
@@ -321,7 +525,7 @@ function CreateCapsuleForm() {
                 <FormLabel className="body-bold">
                   Lock Capsule
                 </FormLabel>
-                <p className="small-regular">You will no longer be able to edit capsule content after locking.</p>
+                <p className="small-regular">You will no longer be able to edit time capsule content after locking.</p>
               </div>
               <FormControl>
                 <Switch
@@ -360,8 +564,13 @@ function CreateCapsuleForm() {
           <Button
             type="submit"
             className="shad-button_primary"
-            onClick={() => form.setValue("sharedWith", users)}>
-            Create *Does nothing*
+            onClick={() => {
+              form.setValue("notes", textNotes);
+              form.setValue("sharedWith", users);
+              form.setValue("images", images);
+              form.setValue("audios", audios);
+            }}>
+            Create
           </Button>
 
         </div>

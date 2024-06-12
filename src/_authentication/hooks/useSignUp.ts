@@ -28,9 +28,8 @@ export function useSignUp() {
                     email: values.email,
                     username: values.username,
                     firstname: values.firstName,
-                    profilePicURL: "https://chronogramorbital.vercel.app/assets/glyphs/user.png",
-                    lockedCapsules: [],
-                    unlockedCapsules: [],
+                    profilePicURL: "/assets/glyphs/user.png",
+                    capsules: [],
                     createdAt: Date.now(),
                     achievements: [false, false, false, false, false],
                 }
@@ -57,7 +56,7 @@ export function useSignUp() {
                         variant: "destructive",
                         title: "Unexpected error.",
                         description: error.message,
-                      });
+                    });
                 }   
             }       
         } else {

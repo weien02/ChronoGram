@@ -2,8 +2,10 @@ import { Card, CardHeader, CardContent} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { getFirstname } from '@/_authentication/authFunctions';
 import LockedCapsuleCarousel from '../capsules/LockedCapsuleCarousel';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 function Dashboard() {
+
   return (
     <div className="p-6">
         
@@ -56,9 +58,14 @@ function Dashboard() {
       
         <div className="mt-12 flex justify-between items-center">
             <p>&copy; 2024 ChronoGram for Orbital - NUS School of Computing</p>
-            <Button className="shad-button_primary" onClick={() => alert('You may contact us at chronogramorbital@gmail.com')}>
-              Contact Admin
-            </Button>
+            <Popover>
+              <PopoverTrigger>
+                <Button className='shad-button_primary'> Contact Us</Button>
+              </PopoverTrigger>
+              <PopoverContent className=' bg-light-3 small-regular text-center'>
+                Email us at chronogramorbital@gmail.com
+              </PopoverContent>
+            </Popover>
         </div>
 
     </div>
