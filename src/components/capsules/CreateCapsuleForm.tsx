@@ -398,13 +398,13 @@ function CreateCapsuleForm() {
               <div className="small-regular">(Audio files will be hidden when time capsule is locked.)</div>
               <FormControl>
                 <div>
-                    <input 
-                      type="file" 
-                      accept="audio/*" 
-                      onChange={handleAudioChange} 
-                      id="audioInput"
-                      style={{ display: 'none' }}
-                    />
+                  <input 
+                    type="file" 
+                    accept=".mp3,.wav,.ogg,.flac,.aac,.m4a" 
+                    onChange={handleAudioChange} 
+                    id="audioInput"
+                    style={{ display: 'none' }}
+                  />
                     <Button 
                       type="button" 
                       className="shad-button_primary" 
@@ -468,7 +468,7 @@ function CreateCapsuleForm() {
                 <div className="flex gap-2">
                   <Input
                     value={usernameInput}
-                    placeholder="e.g. @chronogram, then click 'Add User'"
+                    placeholder="e.g. @chronogram"
                     onChange={(e) => setUsernameInput(e.target.value)}
                     className="shad-input"
                   />
@@ -525,7 +525,7 @@ function CreateCapsuleForm() {
                 <FormLabel className="body-bold">
                   Lock Capsule
                 </FormLabel>
-                <p className="small-regular">You will no longer be able to edit time capsule content after locking.</p>
+                <p className="small-regular">You will no longer be able to edit time capsule contents after locking.</p>
               </div>
               <FormControl>
                 <Switch
