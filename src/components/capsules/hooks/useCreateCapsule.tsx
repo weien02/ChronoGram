@@ -9,6 +9,7 @@ function useCreateCapsule() {
     const { toast } = useToast();
 
     async function createCapsule(values: {
+        
         title?: string,
         unlockDate?: Date,
         notes?: string[],
@@ -17,7 +18,6 @@ function useCreateCapsule() {
         sharedWith?: string[],
         locked?: boolean,
     }) {
-
         const capsuleDoc = {
             title: values.title,
             unlockDate: values.unlockDate.getTime(),
@@ -78,12 +78,10 @@ function useCreateCapsule() {
             });
         }
 
-
     }
 
     return { createCapsule };
   
-
 }
 
 export default useCreateCapsule;
