@@ -180,7 +180,6 @@ function CreateCapsuleForm() {
         resolver: zodResolver(formSchema),
         defaultValues: {
           title: "",
-          unlockDate: null,
           notes: [],
           images: [],
           audios: [],
@@ -190,9 +189,6 @@ function CreateCapsuleForm() {
     });
     
     function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log(values.notes);
-      console.log(values.images);
-      console.log(values.audios);
       createCapsule(values);
     }
 

@@ -45,7 +45,7 @@ module.exports = {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         josefin: ['Josefin Sans', 'sans-serif'],
-        montserrat: ['Montserrat', 'sans-serif'],
+        kumbh: ['Kumbh Sans', 'sans-serif'],
 
       },
       keyframes: {
