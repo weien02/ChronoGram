@@ -2,7 +2,8 @@ import { getUid } from "@/_authentication/authFunctions";
 import { useToast } from "@/components/ui/use-toast";
 import { db, storage } from "@/lib/firebase/config";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
-import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { ref, uploadString } from "firebase/storage";
+import { v4 as uuidv4 } from 'uuid';
 
 function useCreateCapsule() {
   
@@ -23,7 +24,6 @@ function useCreateCapsule() {
             unlockDate: values.unlockDate.getTime(),
             notes: values.notes,
             sharedWith: values.sharedWith,
-            likes: [],
             comments: [],
             createdBy: getUid(),
             createdAt: Date.now(),
@@ -36,26 +36,27 @@ function useCreateCapsule() {
             const uploadedImages = [];
             const uploadedAudios = [];
             await updateDoc(userDocRef, { capsules: arrayUnion(capsuleDocRef.id) });
+            await updateDoc(capsuleDocRef, {capsuleId: capsuleDocRef.id});
             
             //Upload and update images array
             for (let i = 0; i < values.images.length; i++) {
+                const uuid = uuidv4();
                 // Create a unique reference for each image
-                const imageRef = ref(storage, `capsules/${capsuleDocRef.id}/images/image${i}`);
+                const imageRef = ref(storage, `capsules/${capsuleDocRef.id}/images/${uuid}`);
                 await uploadString(imageRef, values.images[i], "data_url");
-                const downloadURL = await getDownloadURL(imageRef);
-                uploadedImages.push(downloadURL);
-                console.log("Attempted image upload");
+                uploadedImages.push(uuid);
+                console.log("Image upload success");
             }
             //Update db doc
             await updateDoc(capsuleDocRef, { images: uploadedImages });
 
             for (let i = 0; i < values.audios.length; i++) {
+                const uuid = uuidv4();
                 // Create a unique reference for each audio file
-                const audioRef = ref(storage, `capsules/${capsuleDocRef.id}/audios/audio${i}`);
+                const audioRef = ref(storage, `capsules/${capsuleDocRef.id}/audios/${uuid}`);
                 await uploadString(audioRef, values.audios[i], "data_url");
-                const downloadURL = await getDownloadURL(audioRef);
-                uploadedAudios.push(downloadURL);
-                console.log("Attempted audio upload");
+                uploadedAudios.push(uuid);
+                console.log("Audio upload success");
             }
             //Update db doc
             await updateDoc(capsuleDocRef, { audios: uploadedAudios });

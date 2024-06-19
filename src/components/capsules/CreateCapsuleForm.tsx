@@ -220,7 +220,7 @@ function CreateCapsuleForm() {
           name="unlockDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel className="body-bold">Set Unlocking Date</FormLabel>
+              <FormLabel className="body-bold">Unlocking Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild className="bg-light-1">
                   <FormControl>

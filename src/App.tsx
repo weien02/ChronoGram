@@ -12,6 +12,7 @@ import CreateCapsule from './_root/pages/CreateCapsule';
 import MyCapsules from './_root/pages/MyCapsules';
 import EditProfile from './_root/pages/EditProfile';
 import SharedWithMe from './_root/pages/SharedWithMe';
+import EditCapsule from './_root/pages/EditCapsule';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/my-capsules" element={<MyCapsules />} />
           <Route path="/shared-with-me" element={<SharedWithMe />} />
           <Route path="/create-capsule" element={<CreateCapsule />} />
+          <Route path="/edit-capsule/:capsuleId/*" element={<EditCapsule />} />
         </Route>
       </Routes>
     </main>

@@ -17,7 +17,7 @@ function UserBadge({ uid, index }) {
             const firstname = await searchFirstname(uid);
             const username = await searchUsername(uid);
             setProfilePicURL(profilePicURL);
-            setFirstname(firstname);
+            setFirstname(firstname + (index === 0 ? " (Creator)" : ""));
             setUsername(username);
           } catch (error) {
             console.error("Error fetching user data:", error);
@@ -30,7 +30,7 @@ function UserBadge({ uid, index }) {
       };
   
       fetchData();
-    }, [currentUser, uid]);
+    }, []);
   
     const searchProfilePicURL = async (uid) => {
       const docRef = doc(db, "users", uid);
