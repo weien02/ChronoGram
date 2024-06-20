@@ -21,8 +21,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-    "suppressImplicitAnyIndexErrors": true,
-
+    
     /* shadcn */
     "baseUrl": ".",
     "paths": {
