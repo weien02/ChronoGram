@@ -189,6 +189,10 @@ function CreateCapsuleForm() {
     });
     
     function onSubmit(values: z.infer<typeof formSchema>) {
+      toast({
+        title: "Creating capsule...",
+        description: "Please wait...",
+      });
       createCapsule(values);
     }
 
@@ -480,7 +484,7 @@ function CreateCapsuleForm() {
                 </div>
               </FormControl>
               <div className="small-regular">
-                Currently shared with: {users.length - 1} other user{users.length === 2 ? "" : "s"}.
+                Shared with: {users.length - 1} other user{users.length === 2 ? "" : "s"}.
               </div>
               <ul
                 id="sharedWithList"

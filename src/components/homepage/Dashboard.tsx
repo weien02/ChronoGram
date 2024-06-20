@@ -11,7 +11,7 @@ function Dashboard() {
       <h1 className="mb-8 h3-bold md:h2-bold">{getFirstname()}'s Dashboard</h1>
 
       <div className="gap-6">
-        {/* Don't remove the surrounding div, can me used to add more cards*/ }
+        {/* Don't remove the surrounding div, can be used to add more cards*/ }
         <Card className="mt-8 bg-light-3">
           <CardHeader>
             <h2 className="text-xl font-semibold">Upcoming Unlocks</h2>
@@ -57,9 +57,9 @@ function Dashboard() {
       
         <div className="mt-12 flex justify-between items-center">
             <p>&copy; 2024 ChronoGram for Orbital - NUS School of Computing</p>
-              <Button className='shad-button_primary'> 
-                <a href="mailto:chronogramorbital@gmail.com">Email Us!</a>
-              </Button>
+            <Button className='shad-button_primary'> 
+              <a href="mailto:chronogramorbital@gmail.com">Email Us!</a>
+            </Button>
         </div>
 
     </div>

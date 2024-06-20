@@ -89,7 +89,7 @@ function ResetPasswordForm() {
                 />
 
                 <Button type="submit" className="shad-button_primary">
-                  Send password reset email
+                  Send password reset link
                 </Button>
 
                 <p className="small-regular text-center mt-6">
