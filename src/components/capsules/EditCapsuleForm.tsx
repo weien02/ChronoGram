@@ -24,7 +24,7 @@ import { getUid, searchUid, usernameAlreadyExists } from "@/_authentication/auth
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "../ui/use-toast";
 import UserBadge from "./UserBadge";
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Carousel,
   CarouselContent,
@@ -33,13 +33,19 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Switch } from "@/components/ui/switch"
-//import useCreateCapsule from "./hooks/useCreateCapsule";
 import { Textarea } from "../ui/textarea";
 import { storage } from "@/lib/firebase/config";
 import { getDownloadURL, ref } from "firebase/storage";
 import { Checkbox } from "../ui/checkbox";
+import useEditCapsule from "./hooks/useEditCapsule";
+import useDeclineShare from "./hooks/useDeclineShare";
+import useDeleteCapsule from "./hooks/useDeleteCapsule";
 
 function EditCapsuleForm({ capsule }) {
+
+    const { editCapsule } = useEditCapsule();
+    const { declineShare } = useDeclineShare();
+    const { deleteCapsule } = useDeleteCapsule();
 
     function isDataURL(str) {
         const regex = /^\s*data:([a-zA-Z]+\/[a-zA-Z0-9\-\+\.]+)?(;base64)?,[a-zA-Z0-9!$&',()*+;=\-._~:@\/?%\s]*\s*$/;
@@ -131,7 +137,6 @@ function EditCapsuleForm({ capsule }) {
     const nextButtonRef = useRef<HTMLButtonElement>(null);
     const nextAudioButtonRef = useRef<HTMLButtonElement>(null);
     const nextTextButtonRef = useRef<HTMLButtonElement>(null);
-    //const { createCapsule } = useCreateCapsule();
 
     const handleTextChange = (e) => {
       setTextValue(e.target.value);
@@ -177,7 +182,9 @@ function EditCapsuleForm({ capsule }) {
     };
 
     const handleDeleteImage = (indexToDelete: number) => {
-      setDeletedImages([...deletedImages, images[indexToDelete]]);
+      if (!isDataURL(images[indexToDelete])) {
+        setDeletedImages([...deletedImages, images[indexToDelete]]);
+      }
       setImages((prevImages) => {
         const updatedImages = [...prevImages];
         updatedImages.splice(indexToDelete, 1);
@@ -201,7 +208,9 @@ function EditCapsuleForm({ capsule }) {
     };
 
     const handleDeleteAudio = (indexToDelete: number) => {
+      if (!isDataURL(audios[indexToDelete])) {  
         setDeletedAudios([...deletedAudios, audios[indexToDelete]]);
+      }
         setAudios((prevAudios) => {
         const updatedAudios = [...prevAudios];
         updatedAudios.splice(indexToDelete, 1);
@@ -251,6 +260,7 @@ function EditCapsuleForm({ capsule }) {
 
     {/*Form Validation*/}
     const formSchema = z.object({
+        capsuleId: z.string(),
         title: z.string().min(1, "Your capsule must have a title!"),
         unlockDate: z.date({required_error: "Your capsule must have an unlocking date!"}),
         notes: z.array(z.string()),
@@ -260,12 +270,14 @@ function EditCapsuleForm({ capsule }) {
         locked: z.boolean(),
         deletedImages: z.array(z.string()),
         deletedAudios: z.array(z.string()),
+        forceUnlock: z.boolean(),
     });
       
     
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
+            capsuleId: capsuleId,
             title: capsuleTitle,
             unlockDate: new Date(unlockingTime),
             notes: textNotes,
@@ -273,12 +285,16 @@ function EditCapsuleForm({ capsule }) {
             audios: audios,
             sharedWith: users,
             locked: isLocked,
+            forceUnlock: false,
           },
     });
     
     function onSubmit(values: z.infer<typeof formSchema>) {
-      //createCapsule(values);
-      console.log(forceUnlocked);
+      toast({
+        title: "Updating capsule...",
+        description: "Please wait...",
+      });
+      editCapsule(values);
     }
 
     
@@ -356,7 +372,21 @@ function EditCapsuleForm({ capsule }) {
                 )}
             />
 
-            {!isLocked && (
+            {isLocked && unlockingTime > Date.now() && (
+              <Card className="p-8 text-center bg-light-3">
+                <CardHeader className="flex flex-col items-center">
+                    <img src="/assets/glyphs/lock.png" alt="Lock Icon" width={40} height={40} className="mb-4" />
+                    <CardTitle className="text-2xl font-bold">Time Capsule Locked</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Time capsule contents are unable to be viewed or edited.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+            )}
+
+            {(!isLocked || unlockingTime < Date.now()) && (
                 <>
                     {/*Notes*/}
                     <FormField
@@ -364,8 +394,9 @@ function EditCapsuleForm({ capsule }) {
                     name="notes"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel className="body-bold">Add Notes</FormLabel>
+                        <FormLabel className="body-bold">Notes</FormLabel>
                             <div className="small-regular">(Notes will be hidden when time capsule is locked.)</div>
+                            {!isLocked && (
                             <FormControl>
                             <div>
                                 <Textarea 
@@ -383,6 +414,7 @@ function EditCapsuleForm({ capsule }) {
                                 </Button>
                             </div>
                             </FormControl>
+                            )}
                             <div className="flex justify-center mt-4">
                             <Carousel className="w-full max-w-xs">
                                 <CarouselContent>
@@ -427,8 +459,9 @@ function EditCapsuleForm({ capsule }) {
                     name="images"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel className="body-bold">Upload Photos</FormLabel>
+                        <FormLabel className="body-bold">Photos</FormLabel>
                         <div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>
+                        {!isLocked && (
                         <FormControl>
                             <div>
                             <input 
@@ -447,6 +480,7 @@ function EditCapsuleForm({ capsule }) {
                             </Button>
                             </div>
                         </FormControl>
+                        )}
                         <div className="flex justify-center mt-4">
                             <Carousel className="w-full max-w-xs">
                             <CarouselContent>
@@ -491,8 +525,9 @@ function EditCapsuleForm({ capsule }) {
                     name="audios"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel className="body-bold">Upload Audio Files</FormLabel>
+                        <FormLabel className="body-bold">Audio Files</FormLabel>
                         <div className="small-regular">(Audio files will be hidden when time capsule is locked.)</div>
+                        {!isLocked && (
                         <FormControl>
                             <div>
                             <input 
@@ -511,6 +546,7 @@ function EditCapsuleForm({ capsule }) {
                                 </Button>
                             </div>
                         </FormControl>
+                        )}
                         <div className="flex justify-center mt-4">
                             <Carousel className="w-full max-w-xs">
                             <CarouselContent>
@@ -589,7 +625,7 @@ function EditCapsuleForm({ capsule }) {
                     </FormControl>
                 )}
                 <div className="small-regular">
-                    Currently shared with: {users.length - 1} other user{users.length === 2 ? "" : "s"}.
+                    Shared with: {users.length - 1} other user{users.length === 2 ? "" : "s"}.
                 </div>
                 <ul
                     id="sharedWithList"
@@ -614,13 +650,28 @@ function EditCapsuleForm({ capsule }) {
                         </div>
                         ) : createdBy !== getUid() && uid === getUid() ? (
                         <div className="flex items-center justify-end">
-                            <Button
-                            type="button"
-                            onClick={() => handleDeleteUser(index)}
-                            className="shad-button_destructive"
-                            >
-                            Decline Share
-                            </Button>
+                            <AlertDialog>
+                              <AlertDialogTrigger>
+                                  <Button
+                                      type="button"
+                                      className="shad-button_destructive"
+                                  >
+                                      Decline Share
+                                  </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="bg-light-4">
+                                  <AlertDialogHeader>
+                                      <AlertDialogTitle>Decline Share?</AlertDialogTitle>
+                                      <AlertDialogDescription>
+                                          You will no longer be able to view or edit this time capsule.
+                                      </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                      <AlertDialogAction onClick={() => declineShare(capsuleId, users, index)}>Confirm</AlertDialogAction>
+                                  </AlertDialogFooter>
+                              </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                         ) : null}
                     </li>
@@ -655,7 +706,7 @@ function EditCapsuleForm({ capsule }) {
                 />
             )}
 
-            {!isLocked && createdBy === getUid() && (
+            {isLocked && createdBy === getUid() && (Date.now() < unlockingTime) && (
                 <div className="bg-light-3 flex flex-row items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                         <p className="body-bold">
@@ -712,7 +763,7 @@ function EditCapsuleForm({ capsule }) {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction>Confirm Delete</AlertDialogAction>
+                        <AlertDialogAction onClick={() => deleteCapsule(capsuleId, capsule.images, capsule.audios)}>Confirm Delete</AlertDialogAction>
                     </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
@@ -728,6 +779,7 @@ function EditCapsuleForm({ capsule }) {
                     form.setValue("audios", audios);
                     form.setValue("deletedImages", deletedImages);
                     form.setValue("deletedAudios", deletedAudios);
+                    form.setValue("forceUnlock", forceUnlocked);
                 }}>
                 Save Changes
             </Button>

@@ -25,7 +25,7 @@ function Sidebar(){
       <div className="flex flex-col gap-11">
         <Link to="/" className="flex gap-3 items-center">
            <img
-              src="assets/icon/Icon-60@2x.png"
+              src="/assets/icon/Icon-60@2x.png"
               alt="logo"
               width={40}
               height={40}
