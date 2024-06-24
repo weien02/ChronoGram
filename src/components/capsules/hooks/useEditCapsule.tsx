@@ -37,10 +37,12 @@ function useEditCapsule() {
             const capsuleDocRef = doc(db, "capsules", values.capsuleId);
             const uploadedImages = values.images;
             const uploadedAudios = values.audios;
-            
+            const todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0);
+
             await updateDoc(capsuleDocRef, {
                 title: values.title,
-                unlockDate: (values.forceUnlock) ? Date.now() : values.unlockDate.getTime(),
+                unlockDate: (values.forceUnlock) ? todayDate.getTime() : values.unlockDate.getTime(),
                 notes: values.notes,
                 sharedWith: values.sharedWith,
                 locked: values.locked,

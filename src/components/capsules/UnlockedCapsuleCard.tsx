@@ -14,14 +14,13 @@ function UnlockedCapsuleCard({ capsule }) {
     return <div>Capsule not found</div>;
   }
 
-  const unlockDate = capsule.unlockDate;
-
   function howManyDaysAgo() {
-    const timing = Math.abs(new Date(unlockDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24);
+    const timing = Math.abs(capsule.unlockDate - Date.now()) / (1000 * 60 * 60 * 24);
+    
     if (timing < 1) {
         return "Today!"
     }
-    return Math.ceil(timing);
+    return Math.floor(timing);
   }
 
   return (
@@ -38,7 +37,7 @@ function UnlockedCapsuleCard({ capsule }) {
             <div className="flex items-center">
               <span className="h3-bold">{howManyDaysAgo()}</span>
               { howManyDaysAgo() !== "Today!" &&
-                (<p className="small-regular ml-2">Day{howManyDaysAgo() === 1 ? "" : "s"} to Unlock</p>)
+                (<p className="small-regular ml-2">Day{howManyDaysAgo() === 1 ? "" : "s"} Ago</p>)
               }
             </div>
           </CardContent>
