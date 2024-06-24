@@ -5,7 +5,7 @@ export interface AuthState {
 	signin: (user: object) => void;
 	signout: () => void;
 	setUser: (user: object) => void;
-  }
+}
 
 const useAuthState = create<AuthState>((set) => ({
 	user: JSON.parse(localStorage.getItem("user-doc")),

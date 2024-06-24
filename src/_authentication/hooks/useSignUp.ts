@@ -4,6 +4,7 @@ import useAuthState from "@/states/authState";
 import { usernameAlreadyExists } from "../authFunctions";
 import { useToast } from "@/components/ui/use-toast";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import useCapsuleState from "@/states/capsuleState";
 
 
 export function useSignUp() {
@@ -11,6 +12,7 @@ export function useSignUp() {
     const { toast } = useToast();
     const emailAlreadyTaken = "Firebase: Error (auth/email-already-in-use).";
     const signInUser = useAuthState((state) => state.signin);
+    const fetchCapsules = useCapsuleState((state) => state.fetchCapsules);
 
     async function signup(values: {
         email?: string;
@@ -38,6 +40,7 @@ export function useSignUp() {
                 setDoc(doc(db, "listOfUsernames", values.username), {uid: newUser.user.uid});
                 localStorage.setItem("user-doc", JSON.stringify(userDoc));
                 signInUser(userDoc);
+                fetchCapsules();
                 toast({
                     variant: "success",
                     title: "Sign up successful!",

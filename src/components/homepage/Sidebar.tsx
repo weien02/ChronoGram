@@ -10,10 +10,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import UserBadge from "../capsules/UserBadge";
+import useCapsuleState from "@/states/capsuleState";
 
 
 
 function Sidebar(){
+
+  const fetchCapsules = useCapsuleState(state => state.fetchCapsules);
 
   const { pathname } = useLocation();
   const { toast } = useToast();
@@ -53,7 +56,7 @@ function Sidebar(){
             return (
               <li
                 key={link.label}
-                className={`sidebar-link ${isActive ? "bg-light-2" : ""}`}>
+                className={`sidebar-link ${isActive ? "bg-light-2" : ""}`} onClick={() => fetchCapsules()}>
                 <NavLink
                   to={link.route}
                   className={`flex gap-4 items-center p-4 ${isActive ? "font-bold" : ""}`}>

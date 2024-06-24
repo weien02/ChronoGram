@@ -40,12 +40,14 @@ import { Checkbox } from "../ui/checkbox";
 import useEditCapsule from "./hooks/useEditCapsule";
 import useDeclineShare from "./hooks/useDeclineShare";
 import useDeleteCapsule from "./hooks/useDeleteCapsule";
+import { useNavigate } from "react-router-dom";
 
 function EditCapsuleForm({ capsule }) {
 
     const { editCapsule } = useEditCapsule();
     const { declineShare } = useDeclineShare();
     const { deleteCapsule } = useDeleteCapsule();
+    const navigate = useNavigate();
 
     function isDataURL(str) {
         const regex = /^\s*data:([a-zA-Z]+\/[a-zA-Z0-9\-\+\.]+)?(;base64)?,[a-zA-Z0-9!$&',()*+;=\-._~:@\/?%\s]*\s*$/;
@@ -437,9 +439,11 @@ function EditCapsuleForm({ capsule }) {
                                         <div className="py-2 text-center small-regular">
                                         Note {index + 1} of {textNotes.length}
                                         </div>
-                                        <Button onClick={() => handleDeleteText(index)} type="button" className="mx-auto justify-center shad-button_destructive">
-                                        Remove
-                                        </Button>
+                                        {!isLocked && (
+                                          <Button onClick={() => handleDeleteText(index)} type="button" className="mx-auto justify-center shad-button_destructive">
+                                          Remove
+                                          </Button>
+                                        )}
                                     </CarouselItem>
                                     ))
                                 )}
@@ -503,9 +507,11 @@ function EditCapsuleForm({ capsule }) {
                                     <div className="py-2 text-center small-regular">
                                         Photo {index + 1} of {images.length}
                                     </div>
-                                    <Button onClick={() => handleDeleteImage(index)} type="button" className="mx-auto justify-center shad-button_destructive">
-                                        Remove
-                                    </Button>
+                                    {!isLocked && (
+                                      <Button onClick={() => handleDeleteImage(index)} type="button" className="mx-auto justify-center shad-button_destructive">
+                                          Remove
+                                      </Button>
+                                    )}
                                     </CarouselItem>
                                 ))
                                 )}
@@ -572,9 +578,11 @@ function EditCapsuleForm({ capsule }) {
                                     <div className="py-2 text-center small-regular">
                                         Audio {index + 1} of {audios.length}
                                     </div>
-                                    <Button onClick={() => handleDeleteAudio(index)} type="button" className="mx-auto justify-center shad-button_destructive">
-                                        Remove
-                                    </Button>
+                                    {!isLocked && (
+                                      <Button onClick={() => handleDeleteAudio(index)} type="button" className="mx-auto justify-center shad-button_destructive">
+                                          Remove
+                                      </Button>
+                                    )}
                                     </CarouselItem>
                                 ))
                                 )}
@@ -740,7 +748,7 @@ function EditCapsuleForm({ capsule }) {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => window.location.reload()}>Confirm Discard</AlertDialogAction>
+                    <AlertDialogAction onClick={() => navigate(-1)}>Confirm Discard</AlertDialogAction>
                 </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>

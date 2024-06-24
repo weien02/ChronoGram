@@ -35,6 +35,7 @@ import {
 import { Switch } from "@/components/ui/switch"
 import useCreateCapsule from "./hooks/useCreateCapsule";
 import { Textarea } from "../ui/textarea";
+import { useNavigate } from "react-router-dom";
 
 function CreateCapsuleForm() {
 
@@ -49,6 +50,7 @@ function CreateCapsuleForm() {
     const nextAudioButtonRef = useRef<HTMLButtonElement>(null);
     const nextTextButtonRef = useRef<HTMLButtonElement>(null);
     const { createCapsule } = useCreateCapsule();
+    const navigate = useNavigate();
 
     const handleTextChange = (e) => {
       setTextValue(e.target.value);
@@ -556,7 +558,7 @@ function CreateCapsuleForm() {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => window.location.reload()}>Confirm Discard</AlertDialogAction>
+                <AlertDialogAction onClick={() => navigate(-1)}>Confirm Discard</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
