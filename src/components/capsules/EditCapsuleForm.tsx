@@ -644,7 +644,7 @@ function EditCapsuleForm({ capsule }) {
                     }}
                 >
                 {users.map((uid, index) => (
-                    <li key={index} className="mt-4 flex items-center justify-between">
+                    <li key={uid} className="mt-4 flex items-center justify-between">
                         <UserBadge uid={uid} index={index} />
                         {index > 0 && createdBy === getUid() ? (
                         <div className="flex items-center justify-end">

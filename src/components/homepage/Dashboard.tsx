@@ -63,7 +63,7 @@ function Dashboard() {
         <Card className="bg-light-3 sidebar-link"
           onClick={() => {
             fetchCapsules();
-            navigate("/my-capsules");
+            navigate("/shared-with-me");
           }}
         >
           <CardHeader>
