@@ -1,12 +1,16 @@
 import { useToast } from "@/components/ui/use-toast";
 import { db, storage } from "@/lib/firebase/config";
+import useCapsuleState from "@/states/capsuleState";
 import { doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref, uploadString } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 
 function useEditCapsule() {
   
     const { toast } = useToast();
+    const fetchCapsules = useCapsuleState((state) => state.fetchCapsules);
+    const navigate = useNavigate();
 
     function isDataURL(str) {
         const regex = /^\s*data:([a-zA-Z]+\/[a-zA-Z0-9\-\+\.]+)?(;base64)?,[a-zA-Z0-9!$&',()*+;=\-._~:@\/?%\s]*\s*$/;
@@ -104,9 +108,10 @@ function useEditCapsule() {
                 description: "Time capsule has been updated successfully!",
             });
 
+            fetchCapsules();
             setTimeout(() => {
-                window.location.reload();
-              }, 2000);
+                navigate(-1);
+            }, 500);
 
         } catch (error) {
             toast({

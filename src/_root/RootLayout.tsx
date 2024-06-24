@@ -6,6 +6,7 @@ import useAuthState from "@/states/authState";
 
 function RootLayout() {
     const authUser = useAuthState(state => state.user);
+
     if (authUser) {
         return (
             <div className='w-full md:flex'>

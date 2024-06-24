@@ -1,6 +1,7 @@
 import { getUid } from "@/_authentication/authFunctions";
 import { useToast } from "@/components/ui/use-toast";
 import { db, storage } from "@/lib/firebase/config";
+import useCapsuleState from "@/states/capsuleState";
 import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ function useDeleteCapsule() {
 
   const {toast} = useToast();
   const navigate = useNavigate();
+  const fetchCapsules = useCapsuleState((state) => state.fetchCapsules);
   
   async function deleteCapsule(capsuleId, images, audios) {
     try {
@@ -53,10 +55,10 @@ function useDeleteCapsule() {
         description: "Time capsule has been deleted successfully!",
       });
 
+      fetchCapsules();
       setTimeout(() => {
         navigate(-1);
-        window.location.reload();
-      }, 2000);
+      }, 500);
 
     } catch (error) {
       toast({

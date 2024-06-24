@@ -1,56 +1,48 @@
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import lockIcon from "/assets/glyphs/lock.png"; 
 import UserBadge from "./UserBadge";
-import { db } from "@/lib/firebase/config";
-import { doc, getDoc } from "firebase/firestore";
-import { useToast } from "../ui/use-toast";
-import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import { format } from "date-fns";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
 
-function LockedCapsuleCard({ id }) {
-  const { toast } = useToast();
-  const [capsuleDoc, setCapsuleDoc] = useState(null);
+function LockedCapsuleCard({ capsule }) {
+  
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    async function getCapsule(id) {
-      try {
-        const docRef = doc(db, "capsules", id);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const capsuleData = docSnap.data();
-          setCapsuleDoc(capsuleData);
-        }
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Unexpected error.",
-          description: error.message,
-        });
-      }
-    }
-
-    getCapsule(id);
-  }, [id]);
-
-  if (!capsuleDoc) {
+  if (!capsule) {
     return <div>Capsule not found</div>;
   }
 
-  const unlockDate = capsuleDoc.unlockDate;
+  const unlockDate = capsule.unlockDate;
+
+  function howManyDaysAgo() {
+    const timing = Math.abs(new Date(unlockDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24);
+    return Math.ceil(timing);
+  }
 
   return (
-    <Card className="bg-light-1 w-full">
-      <CardHeader className="flex flex-col items-start">
-        <UserBadge uid={capsuleDoc.createdBy} index={1} />
-      </CardHeader>
-      <CardContent className="flex flex-col items-center">
-        <h2 className="base-semibold">{capsuleDoc.title}</h2>
-        <img src={lockIcon} alt="lock icon" className="h-8 w-8 mt-4" />
-        <div className="flex items-center mt-2">
-          <span className="h3-bold">{Math.ceil(Math.abs(new Date(unlockDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))}</span>
-          <p className="small-regular ml-2">Days to Unlock</p>
-        </div>
-      </CardContent>
-    </Card>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Card className="bg-light-1 w-full sidebar-link">
+        <CardHeader className="flex flex-col items-start">
+          <UserBadge uid={capsule.createdBy} index={1} />
+        </CardHeader>
+        <CardContent className="flex flex-col items-center">
+          <h2 className="base-semibold">{capsule.title}</h2>
+          <img src={lockIcon} alt="lock icon" className="h-8 w-8 mt-4" />
+          <p className="justify-center mt-2 small-regular">{format(new Date(capsule.unlockDate), 'do MMMM yyyy')}</p>
+          <div className="flex items-center">
+            <span className="h3-bold">{howManyDaysAgo()}</span>
+            <p className="small-regular ml-2">Day{howManyDaysAgo() === 1 ? "" : "s"} to Unlock</p>
+          </div>
+        </CardContent>
+      </Card>
+      </PopoverTrigger>
+      <PopoverContent className="bg-light-3 w-full">
+        <Button className="shad-button_primary" onClick={() => navigate(`/edit-capsule/${capsule.capsuleId}`)}>Edit Capsule</Button>
+      </PopoverContent>
+    </Popover>
   );
 }
 

@@ -10,11 +10,11 @@ function Home() {
     //To check if user is signed in
     onAuthStateChanged(auth, (user) => {
         if (user) {
-          setSignedIn(true);
+            setSignedIn(true);
         } else {
             setSignedIn(false);
         }
-      });
+    });
 
     return (
         <div className="flex flex-1">

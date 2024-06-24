@@ -1,13 +1,17 @@
 import { getUid } from "@/_authentication/authFunctions";
 import { useToast } from "@/components/ui/use-toast";
 import { db, storage } from "@/lib/firebase/config";
+import useCapsuleState from "@/states/capsuleState";
 import { addDoc, arrayUnion, collection, doc, updateDoc } from "firebase/firestore";
 import { ref, uploadString } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 
 function useCreateCapsule() {
   
     const { toast } = useToast();
+    const navigate = useNavigate();
+    const fetchCapsules = useCapsuleState((state) => state.fetchCapsules);
 
     async function createCapsule(values: {
         
@@ -61,15 +65,17 @@ function useCreateCapsule() {
             //Update db doc
             await updateDoc(capsuleDocRef, { audios: uploadedAudios });
 
+            fetchCapsules();
+            setTimeout(() => {
+                navigate(-1);
+            }, 500);
+
             toast({
                 variant: "success",
                 title: "Capsule creation successful!",
                 description: "Time capsule has been created successfully!",
             });
 
-            setTimeout(() => {
-                window.location.reload();
-              }, 2000);
 
         } catch (error) {
             toast({

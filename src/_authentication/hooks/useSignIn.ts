@@ -3,6 +3,7 @@ import useAuthState from "@/states/authState";
 import { useToast } from "@/components/ui/use-toast";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
+import useCapsuleState from "@/states/capsuleState";
 
 
 export function useSignIn() {
@@ -10,6 +11,7 @@ export function useSignIn() {
     const invalidCred = "Firebase: Error (auth/invalid-credential).";
     const { toast } = useToast();
     const signInUser = useAuthState((state) => state.signin);
+    const fetchCapsules = useCapsuleState((state) => state.fetchCapsules);
 
     async function signin(values: {
       email?: string;
@@ -23,6 +25,7 @@ export function useSignIn() {
             const userDoc = docSnap.data();
             localStorage.setItem("user-doc", JSON.stringify(userDoc));
             signInUser(userDoc);
+            fetchCapsules();
             toast({
               variant: "success",
               title: "Sign in successful!",
