@@ -20,7 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { getUid, searchUid, usernameAlreadyExists } from "@/_authentication/authFunctions";
+import { getFirstname, getUid, searchUid, usernameAlreadyExists } from "@/_authentication/authFunctions";
 import { useEffect, useRef, useState } from "react";
 import { useToast } from "../ui/use-toast";
 import UserBadge from "./UserBadge";
@@ -146,7 +146,7 @@ function EditCapsuleForm({ capsule }) {
 
     const handleAddText = () => {
       if (textValue.trim() !== '') {
-        setTextNotes([...textNotes, textValue]);
+        setTextNotes([...textNotes, textValue + " ~ " + getFirstname()]);
         setTextValue('');
       }
       setTimeout(() => {
@@ -307,6 +307,14 @@ function EditCapsuleForm({ capsule }) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="flex flex-col gap-9 w-full max-w-5xl">
 
+            <button className="flex items-center sharedWith-link" onClick={() => navigate(-1)}>
+              <img
+                src="/assets/glyphs/back.png"
+                className="h-6 w-6 mr-2"
+              />
+              Back
+            </button>
+
             {/*Title*/}
             <FormField
                 control={form.control}
@@ -338,7 +346,7 @@ function EditCapsuleForm({ capsule }) {
                         <p>{format(new Date(unlockingTime), 'do MMMM yyyy')}</p>
                     ) : (
                         <Popover>
-                        <PopoverTrigger asChild className="bg-light-1">
+                        <PopoverTrigger asChild className="bg-white">
                             <FormControl>
                             <Button
                                 variant={"outline"}
@@ -356,9 +364,12 @@ function EditCapsuleForm({ capsule }) {
                             </Button>
                             </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0 bg-light-1" align="start">
+                        <PopoverContent className="w-auto p-0 bg-white" align="start">
                             <Calendar
                             mode="single"
+                            captionLayout="dropdown-buttons"
+                            fromYear={new Date().getFullYear()} 
+                            toYear={new Date().getFullYear() + 50}
                             selected={field.value}
                             onSelect={field.onChange}
                             disabled={(date) =>
@@ -430,7 +441,7 @@ function EditCapsuleForm({ capsule }) {
                                     textNotes.map((note, index) => (
                                     <CarouselItem key={index}>
                                         <div className="p-1">
-                                        <Card className="bg-light-1 p-4">
+                                        <Card className="bg-white p-4">
                                             <CardContent className="p-1 flex justify-center items-center">
                                             <p>{note}</p>
                                             </CardContent>

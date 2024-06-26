@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import useEditProfile from "@/_authentication/hooks/useEditProfile";
+import { useNavigate } from "react-router-dom";
 
 function EditProfile() {
   const form = useForm<z.infer<typeof EditProfileValidation>>({
@@ -31,6 +32,7 @@ function EditProfile() {
     },
   });
 
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { editProfile } = useEditProfile();
   const [imagePreview, setImagePreview] = useState(getProfilePicURL());
@@ -172,7 +174,7 @@ function EditProfile() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => window.location.reload()}>Confirm Discard</AlertDialogAction>
+                      <AlertDialogAction onClick={() => navigate(-1)}>Confirm Discard</AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
