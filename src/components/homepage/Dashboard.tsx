@@ -45,45 +45,52 @@ function Dashboard() {
       </div>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="bg-light-3 sidebar-link"
-          onClick={() => {
-            fetchCapsules();
-            navigate("/my-capsules");
-          }}
-        >
-          <CardHeader>
-            <h2 className="font-semibold">Capsules Created</h2>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{myCapsules.length}</p>
-            <p className='mt-2'>Time capsules you've created</p>
-          </CardContent>
-        </Card>
+        
+        <button>
+          <Card className="bg-light-3 sidebar-link"
+            onClick={() => {
+              fetchCapsules();
+              navigate("/my-capsules");
+            }}
+          >
+            <CardHeader>
+              <h2 className="font-semibold">Your Capsules</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="text-4xl font-bold">{myCapsules.length}</p>
+              <p className='mt-2'>Time capsules you've created</p>
+            </CardContent>
+          </Card>
+        </button>
 
-        <Card className="bg-light-3 sidebar-link"
-          onClick={() => {
-            fetchCapsules();
-            navigate("/shared-with-me");
-          }}
-        >
-          <CardHeader>
-            <h2 className="font-semibold">Shared With You</h2>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">{sharedWithMe.length}</p>
-            <p className='mt-2'>Time capsules shared with you</p>
-          </CardContent>
-        </Card>
+        <button>
+          <Card className="bg-light-3 sidebar-link"
+            onClick={() => {
+              fetchCapsules();
+              navigate("/shared-with-me");
+            }}
+          >
+            <CardHeader>
+              <h2 className="font-semibold">Shared With You</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="text-4xl font-bold">{sharedWithMe.length}</p>
+              <p className='mt-2'>Time capsules shared with you</p>
+            </CardContent>
+          </Card>
+        </button>
 
-        <Card className="bg-light-3">
-          <CardHeader>
-            <h2 className="font-semibold">Achievements</h2>
-          </CardHeader>
-          <CardContent>
-            <p className="text-4xl font-bold">0</p>
-            <p className='mt-2'>Achievements you have completed</p>
-          </CardContent>
-        </Card>
+        <button>
+          <Card className="bg-light-3">
+            <CardHeader>
+              <h2 className="font-semibold">Achievements</h2>
+            </CardHeader>
+            <CardContent>
+              <p className="text-4xl font-bold">0</p>
+              <p className='mt-2'>Achievements you have completed</p>
+            </CardContent>
+          </Card>
+        </button>
       </div>
 
       

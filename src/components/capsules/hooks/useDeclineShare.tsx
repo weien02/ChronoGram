@@ -1,3 +1,4 @@
+import { getUid } from "@/_authentication/authFunctions";
 import { useToast } from "@/components/ui/use-toast";
 import { db } from "@/lib/firebase/config";
 import useCapsuleState from "@/states/capsuleState";
@@ -9,17 +10,19 @@ function useDeclineShare() {
   const navigate = useNavigate();
   const fetchCapsules = useCapsuleState((state) => state.fetchCapsules);
 
-  async function declineShare(capsuleId, users, index) {
-    users.splice(index, 1);
+  async function declineShare(capsuleId, users, type) {
+    const newUsers = users.filter(x => x != getUid())
 
     try {
       const capsuleDocRef = doc(db, "capsules", capsuleId);
-      await updateDoc(capsuleDocRef, {sharedWith: users,});
+      await updateDoc(capsuleDocRef, {sharedWith: newUsers,});
 
       fetchCapsules();
-      setTimeout(() => {
-        navigate(-1);
-      }, 500);
+        if (type === 0) {
+        setTimeout(() => {
+          navigate(-1);
+        }, 500);
+      }
 
       toast({
         variant: "success",
