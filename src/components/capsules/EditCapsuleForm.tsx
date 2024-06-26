@@ -408,7 +408,7 @@ function EditCapsuleForm({ capsule }) {
                     render={({ field }) => (
                         <FormItem>
                         <FormLabel className="body-bold">Notes</FormLabel>
-                            <div className="small-regular">(Notes will be hidden when time capsule is locked.)</div>
+                            {!isLocked && (<div className="small-regular">(Notes will be hidden when time capsule is locked.)</div>)}
                             {!isLocked && (
                             <FormControl>
                             <div>
@@ -475,7 +475,7 @@ function EditCapsuleForm({ capsule }) {
                     render={({ field }) => (
                         <FormItem>
                         <FormLabel className="body-bold">Photos</FormLabel>
-                        <div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>
+                        {!isLocked && (<div className="small-regular">(Photos will be hidden when time capsule is locked.)</div>)}
                         {!isLocked && (
                         <FormControl>
                             <div>
@@ -543,7 +543,7 @@ function EditCapsuleForm({ capsule }) {
                     render={({ field }) => (
                         <FormItem>
                         <FormLabel className="body-bold">Audio Files</FormLabel>
-                        <div className="small-regular">(Audio files will be hidden when time capsule is locked.)</div>
+                        {!isLocked && (<div className="small-regular">(Audio files will be hidden when time capsule is locked.)</div>)}
                         {!isLocked && (
                         <FormControl>
                             <div>
@@ -687,7 +687,7 @@ function EditCapsuleForm({ capsule }) {
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
                                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                      <AlertDialogAction onClick={() => declineShare(capsuleId, users, index)}>Confirm</AlertDialogAction>
+                                      <AlertDialogAction onClick={() => declineShare(capsuleId, users, 0)}>Confirm</AlertDialogAction>
                                   </AlertDialogFooter>
                               </AlertDialogContent>
                           </AlertDialog>
