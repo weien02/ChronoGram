@@ -20,7 +20,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { getUid, searchUid, usernameAlreadyExists } from "@/_authentication/authFunctions";
+import { getFirstname, getUid, searchUid, usernameAlreadyExists } from "@/_authentication/authFunctions";
 import { useRef, useState } from "react";
 import { useToast } from "../ui/use-toast";
 import UserBadge from "./UserBadge";
@@ -58,7 +58,7 @@ function CreateCapsuleForm() {
 
     const handleAddText = () => {
       if (textValue.trim() !== '') {
-        setTextNotes([...textNotes, textValue]);
+        setTextNotes([...textNotes, textValue + " ~ " + getFirstname()]);
         setTextValue('');
       }
       setTimeout(() => {
@@ -228,7 +228,7 @@ function CreateCapsuleForm() {
             <FormItem className="flex flex-col">
               <FormLabel className="body-bold">Unlocking Date</FormLabel>
               <Popover>
-                <PopoverTrigger asChild className="bg-light-1">
+                <PopoverTrigger asChild className="bg-white">
                   <FormControl>
                     <Button
                       variant={"outline"}
@@ -246,13 +246,16 @@ function CreateCapsuleForm() {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-light-1" align="start">
+                <PopoverContent className="w-auto p-0 bg-white" align="start">
                   <Calendar
                     mode="single"
+                    captionLayout="dropdown-buttons"
+                    fromYear={new Date().getFullYear()} 
+                    toYear={new Date().getFullYear() + 50}
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date) =>
-                      date < new Date()
+                        date < new Date()
                     }
                     initialFocus
                   />
@@ -301,7 +304,7 @@ function CreateCapsuleForm() {
                         textNotes.map((note, index) => (
                           <CarouselItem key={index}>
                             <div className="p-1">
-                              <Card className="bg-light-1 p-4">
+                              <Card className="bg-white p-4">
                                 <CardContent className="p-1 flex justify-center items-center">
                                   <p>{note}</p>
                                 </CardContent>

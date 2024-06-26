@@ -270,7 +270,11 @@ html, body, #root, .App {
 
   /* Post Card */
   .post-card {
-    @apply bg-dark-2 rounded-3xl border border-dark-4 p-5 lg:p-7 w-full max-w-screen-sm;
+    @apply bg-light-3 rounded-3xl p-5 lg:p-10 w-full max-w-screen-sm;
+  }
+
+  .sharedWith-link {
+    @apply hover:underline;
   }
 
   .post-card_img {
@@ -300,24 +304,24 @@ html, body, #root, .App {
   }
 
   .shad-input {
-    @apply h-12 bg-light-1 border-none placeholder:text-primary-500 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-12 bg-white border-none placeholder:text-primary-500 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
   }
 
   .shad-textarea {
-    @apply h-36 bg-light-1 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-36 bg-white rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
   }
 
   /* Button */
   .shad-button_primary {
-    @apply bg-primary-600 hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply bg-primary-600 hover:bg-primary-500 text-white flex gap-2 !important;
   }
 
   .shad-button_dark_4 {
-    @apply bg-dark-4 hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply bg-dark-4 hover:bg-primary-500 text-white flex gap-2 !important;
   }
 
   .shad-button_destructive {
-    @apply bg-red hover:bg-primary-500 text-light-1 flex gap-2 !important;
+    @apply bg-red hover:bg-primary-500 text-white flex gap-2 !important;
   }
 
   .shad-button_ghost {

@@ -29,7 +29,7 @@ function PendingCapsuleCarousel({pers}) {
         {capsulesToDisplay.length === 0
         ? (<CarouselItem className="rounded-lg">
           <div className="p-1 flex justify-center items-center h-20">
-              <p className="base-semibold">No capsules yet...</p>
+              <p>No capsules yet...</p>
           </div>
           </CarouselItem>)
         : (capsulesToDisplay.map((capsule, index) => (
