@@ -6,7 +6,7 @@ import { create } from "zustand";
 export interface Capsule {
   audios: string[];
   capsuleId: string;
-  comments: string[];
+  comments: CapsuleComment[];
   createdAt: number;
   createdBy: string;
   images: string[];
@@ -15,6 +15,14 @@ export interface Capsule {
   sharedWith: string[];
   title: string;
   unlockDate: number;
+}
+
+export interface CapsuleComment {
+  commentId: string;
+  createdBy: string;
+  createdAt: number;
+  comment: string;
+  creator: boolean;
 }
 
 export interface CapsuleState {
