@@ -256,8 +256,10 @@ const TimeTunnelCard = ({ capsule }) => {
                                 <Button
                                     className="shad-button_primary"
                                     onClick={() => {
-                                        addComment(capsule.capsuleId, commentText, capsule.createdBy === getUid());
-                                        setCommentText("");
+                                        if (commentText !== "") {
+                                            addComment(capsule.capsuleId, commentText, capsule.createdBy === getUid());
+                                            setCommentText("");
+                                        }
                                     }}
                                 >
                                     Post
