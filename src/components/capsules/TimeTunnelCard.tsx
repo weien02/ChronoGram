@@ -16,6 +16,10 @@ import { useNavigate } from "react-router-dom";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import { getUid } from "@/_authentication/authFunctions";
 import useDeclineShare from "./hooks/useDeclineShare";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
+import Comment from "../Comment";
+import { Textarea } from "../ui/textarea";
+import useAddComment from "./hooks/useAddComment";
 
 const TimeTunnelCard = ({ capsule }) => {
 
@@ -26,6 +30,8 @@ const TimeTunnelCard = ({ capsule }) => {
     const sharedWith = capsule.sharedWith.slice(1);
     const navigate = useNavigate();
     const { declineShare } = useDeclineShare();
+    const [commentText, setCommentText] = useState('');
+    const { addComment }  = useAddComment();
 
     function howManyDaysAgo() {
         const timing = Math.abs(capsule.unlockDate - Date.now()) / (1000 * 60 * 60 * 24);
@@ -221,10 +227,48 @@ const TimeTunnelCard = ({ capsule }) => {
                     </Carousel>
                 )}
 
-                <div className="flex items-center mt-4 justify-end">
-                    <img src="/assets/glyphs/comments.png" alt="Comments" className="w-6 h-6 mr-2" />
-                    <p className="small-regular">{capsule.comments.length} comment{capsule.comments.length === 1 ? "" : "s"}</p>
+                
+                <div className="flex justify-end mt-4">
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <button className="flex items-center">
+                                <img src="/assets/glyphs/comments.png" alt="Comments" className="w-6 h-6 mr-2" />
+                                <p className="small-regular">{capsule.comments.length} reflection{capsule.comments.length === 1 ? "" : "s"}</p>
+                            </button>
+                        </DialogTrigger>
+                        <DialogContent className="bg-light-3">
+                            <DialogTitle>Reflections</DialogTitle>
+                            {capsule.comments.length === 0 && (<p className="small-regular">Be the first to post a reflection!</p>)}
+                            <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                                {capsule.comments.map((comment) => (
+                                <div key={comment.commentId}>
+                                    <Comment comment={comment} capsuleId={capsule.capsuleId} otherComments={capsule.comments}/>
+                                </div>
+                                ))}
+                            </div>
+                            <div className="flex gap-2 items-center">
+                                <Textarea
+                                    className="shad-input"
+                                    value={commentText}
+                                    onChange={(e) => setCommentText(e.target.value)}
+                                    placeholder="Type your reflection here!"
+                                />
+                                <Button
+                                    className="shad-button_primary"
+                                    onClick={() => {
+                                        addComment(capsule.capsuleId, commentText, capsule.createdBy === getUid());
+                                        setCommentText("");
+                                    }}
+                                >
+                                    Post
+                                </Button>
+                            </div>
+
+                        </DialogContent>
+                    </Dialog>
                 </div>
+                    
+                
             </div>
         </Card>
     );
