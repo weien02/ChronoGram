@@ -2,6 +2,7 @@ import { getUid } from "@/_authentication/authFunctions";
 import UserBadge from "./capsules/UserBadge";
 import { Button } from "./ui/button";
 import useDeleteComment from "./capsules/hooks/useDeleteComment";
+import { format } from "date-fns";
 
 function Comment({comment, capsuleId, otherComments}) {
     
@@ -15,8 +16,11 @@ function Comment({comment, capsuleId, otherComments}) {
                 <Button className="shad-button_destructive" onClick={() => deleteComment(capsuleId, comment.commentId, otherComments)}>Delete</Button>
             )}
           </div>
-          <div className="small-regular mt-4">
+          <div className="base-regular mt-4">
             {comment.comment}
+          </div>
+          <div className="tiny-medium mt-4">
+            {format(new Date(comment.createdAt), 'd MMMM yyyy, h:mm a')}
           </div>
         </div>
       );
