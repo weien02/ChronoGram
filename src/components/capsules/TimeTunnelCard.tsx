@@ -20,6 +20,7 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog"
 import Comment from "../Comment";
 import { Textarea } from "../ui/textarea";
 import useAddComment from "./hooks/useAddComment";
+import useCapsuleState from "@/states/capsuleState";
 
 const TimeTunnelCard = ({ capsule }) => {
 
@@ -32,6 +33,7 @@ const TimeTunnelCard = ({ capsule }) => {
     const { declineShare } = useDeclineShare();
     const [commentText, setCommentText] = useState('');
     const { addComment }  = useAddComment();
+    const fetchCapsules = useCapsuleState(state => state.fetchCapsules);
 
     function howManyDaysAgo() {
         const timing = Math.abs(capsule.unlockDate - Date.now()) / (1000 * 60 * 60 * 24);
@@ -231,12 +233,12 @@ const TimeTunnelCard = ({ capsule }) => {
                 <div className="flex justify-end mt-4">
                     <Dialog>
                         <DialogTrigger asChild>
-                            <button className="flex items-center">
+                            <button className="flex items-center" onClick={() => fetchCapsules()}>
                                 <img src="/assets/glyphs/comments.png" alt="Comments" className="w-6 h-6 mr-2" />
                                 <p className="small-regular">{capsule.comments.length} reflection{capsule.comments.length === 1 ? "" : "s"}</p>
                             </button>
                         </DialogTrigger>
-                        <DialogContent className="bg-light-3">
+                        <DialogContent className="bg-light-4">
                             <DialogTitle>Reflections</DialogTitle>
                             {capsule.comments.length === 0 && (<p className="small-regular">Be the first to post a reflection!</p>)}
                             <div style={{ maxHeight: '400px', overflowY: 'auto' }}>

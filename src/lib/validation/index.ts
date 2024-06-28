@@ -10,7 +10,7 @@ export const SignUpValidation = z.object({
 
 export const SignInValidation = z.object({
     email: z.string().email({message: 'Invalid email address!'}),
-    password: z.string().max(128, {message: 'Invalid input!'}),
+    password: z.string().min(1, { message: 'Please enter your password!' }),
 });
 
 export const ResetPasswordValidation = z.object({
