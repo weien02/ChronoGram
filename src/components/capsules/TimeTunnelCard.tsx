@@ -50,53 +50,58 @@ const TimeTunnelCard = ({ capsule }) => {
       }
   
     useEffect(() => {
-        // Function to fetch images from Firebase Storage
-        const fetchImageFromStorage = async (src) => {
-          try {
-            const imageUrl = await getDownloadURL(ref(storage, `capsules/${capsule.capsuleId}/images/${src}`));
-            return imageUrl;
-          } catch (error) {
-            console.error('Error fetching image:', error);
-            return null;
-          }
-        };
-    
-        // Fetch images from Firebase Storage for non-data URLs
-        const fetchImages = async () => {
-          const fetchedImages = await Promise.all(
-            images.map(async (src) => {
-                return fetchImageFromStorage(src);
-            })
-          );
-          setFetchedImages(fetchedImages);
-        };
-    
+        if (!capsule.locked || capsule.unlockDate <= Date.now()) {
+            const fetchImageFromStorage = async (src) => {
+            try {
+                const imageUrl = await getDownloadURL(ref(storage, `capsules/${capsule.capsuleId}/images/${src}`));
+                return imageUrl;
+            } catch (error) {
+                console.error('Error fetching image:', error);
+                return null;
+            }
+            };
+        
+            // Fetch images from Firebase Storage for non-data URLs
+            const fetchImages = async () => {
+            const fetchedImages = await Promise.all(
+                images.map(async (src) => {
+                    return fetchImageFromStorage(src);
+                })
+            );
+            setFetchedImages(fetchedImages);
+            }; 
         fetchImages();
+        } else {
+            console.log("Locked capsule.");
+        }
       }, [images]);
 
       useEffect(() => {
-        // Function to fetch audio files from Firebase Storage
-        const fetchAudioFromStorage = async (src) => {
-          try {
-            const audioURL = await getDownloadURL(ref(storage, `capsules/${capsule.capsuleId}/audios/${src}`));
-            return audioURL;
-          } catch (error) {
-            console.error('Error fetching audio:', error);
-            return null;
-          }
-        };
-    
-        // Fetch audio from Firebase Storage for non-data URLs
-        const fetchAudios = async () => {
-          const fetchedAudios = await Promise.all(
-            audios.map(async (src) => {
-                return fetchAudioFromStorage(src);
-            })
-          );
-          setFetchedAudios(fetchedAudios);
-        };
-    
-        fetchAudios();
+        if (!capsule.locked || capsule.unlockDate <= Date.now()) {
+            const fetchAudioFromStorage = async (src) => {
+            try {
+                const audioURL = await getDownloadURL(ref(storage, `capsules/${capsule.capsuleId}/audios/${src}`));
+                return audioURL;
+            } catch (error) {
+                console.error('Error fetching audio:', error);
+                return null;
+            }
+            };
+        
+            // Fetch audio from Firebase Storage for non-data URLs
+            const fetchAudios = async () => {
+            const fetchedAudios = await Promise.all(
+                audios.map(async (src) => {
+                    return fetchAudioFromStorage(src);
+                })
+            );
+            setFetchedAudios(fetchedAudios);
+            };
+        
+            fetchAudios();
+        } else {
+            console.log("Locked capsule.");
+        }
       }, [audios]);
   
       return capsule.locked && capsule.unlockDate > Date.now()
