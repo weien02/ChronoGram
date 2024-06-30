@@ -47,7 +47,8 @@ function UnlockedCapsuleCard({ capsule }) {
           </CardContent>
         </Card>
       </PopoverTrigger>
-      <PopoverContent className="bg-light-3 w-full">
+      <PopoverContent className="bg-light-3 w-full flex">
+        <Button className="shad-button_primary mr-2" onClick={() => navigate(`/view-capsule/${capsule.capsuleId}`)}>View Capsule</Button>
         { capsule.createdBy === getUid()
         
         ? (<Button className="shad-button_primary" onClick={() => navigate(`/edit-capsule/${capsule.capsuleId}`)}>Edit Capsule</Button>)
