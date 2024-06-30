@@ -61,7 +61,7 @@ function Sidebar(){
                   to={link.route}
                   className={`flex gap-4 items-center p-4 ${isActive ? "font-bold" : ""}`}>
                   <img
-                    src={isActive ? link.imgURLSelected : link.imgURL}
+                    src={link.imgURL}
                     alt={link.label}
                     className="h-6 w-6"
                   />
