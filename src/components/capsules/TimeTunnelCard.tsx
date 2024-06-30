@@ -9,7 +9,7 @@ import {
     CarouselNext,
     CarouselPrevious,
   } from "@/components/ui/carousel"
-  import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
@@ -99,7 +99,21 @@ const TimeTunnelCard = ({ capsule }) => {
         fetchAudios();
       }, [audios]);
   
-      return (
+      return capsule.locked && capsule.unlockDate > Date.now()
+      ? (
+        <Card className="p-8 text-center bg-light-3">
+            <CardHeader className="flex flex-col items-center">
+                <img src="/assets/glyphs/lock.png" alt="Lock Icon" width={40} height={40} className="mb-4" />
+                <CardTitle className="text-2xl font-bold">Time Capsule Locked</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <CardDescription>
+                Time capsule contents are unable to be viewed or edited.
+                </CardDescription>
+            </CardContent>
+        </Card>
+      )
+      : (
         <Card className="p-8 mb-6 bg-light-1">
             <div className="flex items-center justify-between">
                 <div className="flex items-center">
@@ -165,10 +179,11 @@ const TimeTunnelCard = ({ capsule }) => {
     
             <div className="small-medium lg:base-medium py-5 justify-between">
                 <p className="h3-bold mb-2">{capsule.title}</p>
-                <div className="flex items-center mb-4">
+                {capsule.locked && (<div className="flex items-center mb-4">
                     <img src="/assets/glyphs/unlock.png" className="w-6 h-6 mr-2" />
                     <p className="small-regular">{howManyDaysAgo()}</p>
                 </div>
+                )}
 
                 {capsule.notes.length > 0 && (
                     <div>
@@ -230,7 +245,7 @@ const TimeTunnelCard = ({ capsule }) => {
                 )}
 
                 
-                <div className="flex justify-end mt-4">
+                {capsule.locked && (<div className="flex justify-end mt-4">
                     <Dialog>
                         <DialogTrigger asChild>
                             <button className="flex items-center" onClick={() => fetchCapsules()}>
@@ -270,7 +285,7 @@ const TimeTunnelCard = ({ capsule }) => {
 
                         </DialogContent>
                     </Dialog>
-                </div>
+                </div>)}
                     
                 
             </div>
