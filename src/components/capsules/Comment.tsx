@@ -1,7 +1,7 @@
 import { getUid } from "@/_authentication/authFunctions";
-import UserBadge from "./capsules/UserBadge";
-import { Button } from "./ui/button";
-import useDeleteComment from "./capsules/hooks/useDeleteComment";
+import UserBadge from "./UserBadge";
+import { Button } from "../ui/button";
+import useDeleteComment from "./hooks/useDeleteComment";
 import { format } from "date-fns";
 
 function Comment({comment, capsuleId, otherComments}) {

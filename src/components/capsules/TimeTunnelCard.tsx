@@ -17,7 +17,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { getUid } from "@/_authentication/authFunctions";
 import useDeclineShare from "./hooks/useDeclineShare";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog";
-import Comment from "../Comment";
+import Comment from "./Comment";
 import { Textarea } from "../ui/textarea";
 import useAddComment from "./hooks/useAddComment";
 import useCapsuleState from "@/states/capsuleState";

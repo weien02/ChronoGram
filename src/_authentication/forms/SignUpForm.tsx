@@ -63,6 +63,7 @@ function SignUpForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="body-bold">First Name</FormLabel>
+                      <p className="small-medium">(This will be publicly visible.)</p>
                       <FormControl>
                         <Input type="firstName" className="shad-input" {...field} />
                       </FormControl>
