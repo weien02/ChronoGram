@@ -179,10 +179,11 @@ const TimeTunnelCard = ({ capsule }) => {
     
             <div className="small-medium lg:base-medium py-5 justify-between">
                 <p className="h3-bold mb-2">{capsule.title}</p>
-                <div className="flex items-center mb-4">
+                {capsule.locked && (<div className="flex items-center mb-4">
                     <img src="/assets/glyphs/unlock.png" className="w-6 h-6 mr-2" />
                     <p className="small-regular">{howManyDaysAgo()}</p>
                 </div>
+                )}
 
                 {capsule.notes.length > 0 && (
                     <div>
@@ -244,7 +245,7 @@ const TimeTunnelCard = ({ capsule }) => {
                 )}
 
                 
-                <div className="flex justify-end mt-4">
+                {capsule.locked && (<div className="flex justify-end mt-4">
                     <Dialog>
                         <DialogTrigger asChild>
                             <button className="flex items-center" onClick={() => fetchCapsules()}>
@@ -284,7 +285,7 @@ const TimeTunnelCard = ({ capsule }) => {
 
                         </DialogContent>
                     </Dialog>
-                </div>
+                </div>)}
                     
                 
             </div>
