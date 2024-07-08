@@ -5,6 +5,8 @@ import LockedCapsuleCarousel from '../capsules/LockedCapsuleCarousel';
 import useCapsuleState from '@/states/capsuleState';
 import UnlockedCapsuleCarousel from '../capsules/UnlockedCapsuleCarousel';
 import { useNavigate } from 'react-router-dom';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog';
+import { Input } from '../ui/input';
 
 function Dashboard() {
 
@@ -80,17 +82,31 @@ function Dashboard() {
           </Card>
         </button>
 
-        <button>
-          <Card className="bg-light-3">
-            <CardHeader>
-              <h2 className="font-semibold">Achievements</h2>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold">0</p>
-              <p className='mt-2'>Achievements you have completed</p>
-            </CardContent>
-          </Card>
-        </button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <button>
+              <Card className="bg-light-3 sidebar-link">
+                <CardHeader>
+                  <h2 className="font-semibold">Capsule Search</h2>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center text-center">
+                  <img src="/assets/glyphs/search.png" width="36" height="36" />
+                  <p className="mt-2">Search for time capsules</p>
+                </CardContent>
+              </Card>
+            </button>
+          </DialogTrigger>
+          <DialogContent className="bg-light-4">
+            <DialogTitle>Capsule Search</DialogTitle>
+            <div className="flex gap-2 items-center">
+              <Input
+                className="shad-input"
+                placeholder="Search for time capsules here!"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+
       </div>
 
       
