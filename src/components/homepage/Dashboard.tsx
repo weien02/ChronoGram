@@ -5,8 +5,6 @@ import LockedCapsuleCarousel from '../capsules/LockedCapsuleCarousel';
 import useCapsuleState from '@/states/capsuleState';
 import UnlockedCapsuleCarousel from '../capsules/UnlockedCapsuleCarousel';
 import { useNavigate } from 'react-router-dom';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Input } from '../ui/input';
 
 function Dashboard() {
 
@@ -82,30 +80,19 @@ function Dashboard() {
           </Card>
         </button>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <button>
-              <Card className="bg-light-3 sidebar-link">
-                <CardHeader>
-                  <h2 className="font-semibold">Capsule Search</h2>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center text-center">
-                  <img src="/assets/glyphs/search.png" width="36" height="36" />
-                  <p className="mt-2">Search for time capsules</p>
-                </CardContent>
-              </Card>
-            </button>
-          </DialogTrigger>
-          <DialogContent className="bg-light-4">
-            <DialogTitle>Capsule Search</DialogTitle>
-            <div className="flex gap-2 items-center">
-              <Input
-                className="shad-input"
-                placeholder="Search for time capsules here!"
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
+        
+        <button onClick={() => window.open('https://docs.google.com/document/d/1Y5WJEAy4PFRN_7_3TH3TtwcdQkVVcm8z5WRXldB4xyI/edit?usp=sharing', '_blank')}>
+          <Card className="bg-light-3 sidebar-link">
+            <CardHeader>
+              <h2 className="font-semibold">Need Help?</h2>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center text-center">
+              <img src="/assets/glyphs/search.png" width="36" height="36" />
+              <p className="mt-2">Read our documentation</p>
+            </CardContent>
+          </Card>
+        </button>
+          
 
       </div>
 
